@@ -1,7 +1,6 @@
 {
   "name": "jDiamond",
   "version": "1.0.0",
-  "main": "hello.js",
   "dependencies": {
     "ffi": "^2.2.0"
   },
