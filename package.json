@@ -1,0 +1,14 @@
+{
+  "name": "jDiamond",
+  "version": "1.0.0",
+  "main": "hello.js",
+  "dependencies": {
+    "ffi": "^2.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ahnaf Siddiqui",
+  "license": "Apache-2.0"
+}
