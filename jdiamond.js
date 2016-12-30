@@ -19,16 +19,15 @@ var Diamond = ffi.Library('CDiamond/build/libCDiamond', {
     'dTransform2SetTransform': ['void', ['int', 'float', 'float', 'float', 'float', 'float']],
     'dTransform2SetPosition': ['void', ['int', 'float', 'float']],
     'dTransform2GetPositionX': ['float', ['int']],
-    'dTransform2SetPositionX': ['void', ['int', 'float']],
     'dTransform2GetPositionY': ['float', ['int']],
-    'dTransform2SetPositionY': ['void', ['int', 'float']],
+    'dTransform2AddPositionX': ['void', ['int', 'float']],
+    'dTransform2AddPositionY': ['void', ['int', 'float']],
     'dTransform2GetRotation': ['float', ['int']],
     'dTransform2SetRotation': ['void', ['int', 'float']],
+    'dTransform2AddRotation': ['void', ['int', 'float']],
     'dTransform2SetScale': ['void', ['int', 'float', 'float']],
     'dTransform2GetScaleX': ['float', ['int']],
-    'dTransform2SetScaleX': ['void', ['int', 'float']],
     'dTransform2GetScaleY': ['float', ['int']],
-    'dTransform2SetScaleY': ['void', ['int', 'float']],
     // Renderer2D
     'dRenderer2DInit': ['bool', []],
     'dRenderer2DDestroy': ['void', []],
@@ -73,15 +72,9 @@ if (Diamond.dEngine2DInit() &&
 
     var gameUpdate = ffi.Callback('void', ['int'], function(delta) {
         console.log("Update: ", delta, " ms");
-        Diamond.dTransform2SetPositionX(
-            transform, Diamond.dTransform2GetPositionX(transform) + delta * direction
-        );
-        Diamond.dTransform2SetPositionY(
-            transform, Diamond.dTransform2GetPositionY(transform) + delta * direction
-        );
-        Diamond.dTransform2SetRotation(
-            transform, Diamond.dTransform2GetRotation(transform) + delta * direction
-        );
+        Diamond.dTransform2AddPositionX(transform, delta * direction);
+        Diamond.dTransform2AddPositionY(transform, delta * direction);
+        Diamond.dTransform2AddRotation(transform, delta * direction);
         direction *= -1;
     });
 

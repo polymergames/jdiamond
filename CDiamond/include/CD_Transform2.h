@@ -60,23 +60,21 @@ void dTransform2SetPosition(tCD_Handle transform,
                             float positionX, float positionY);
 
 float dTransform2GetPositionX(tCD_Handle transform);
-void dTransform2SetPositionX(tCD_Handle transform, float x);
-
 float dTransform2GetPositionY(tCD_Handle transform);
-void dTransform2SetPositionY(tCD_Handle transform, float y);
+
+void dTransform2AddPositionX(tCD_Handle transform, float dx);
+void dTransform2AddPositionY(tCD_Handle transform, float dy);
 
 float dTransform2GetRotation(tCD_Handle transform);
 void dTransform2SetRotation(tCD_Handle transform, float rotation);
+void dTransform2AddRotation(tCD_Handle transform, float drotation);
 
 void dTransform2VSetScale(tCD_Handle transform, dVector2f scale);
 void dTransform2SetScale(tCD_Handle transform,
                          float scaleX, float scaleY);
 
 float dTransform2GetScaleX(tCD_Handle transform);
-void dTransform2SetScaleX(tCD_Handle transform, float x);
-
 float dTransform2GetScaleY(tCD_Handle transform);
-void dTransform2SetScaleY(tCD_Handle transform, float y);
 
 #ifdef __cplusplus
 }

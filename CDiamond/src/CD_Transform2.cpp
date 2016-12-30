@@ -80,6 +80,7 @@ void dTransform2VSetTransform(tCD_Handle transform,
     trans->scale.x    = scale.x;
     trans->scale.y    = scale.y;
 }
+
 void dTransform2SetTransform(tCD_Handle transform,
                              float positionX, float positionY,
                              float rotation,
@@ -97,6 +98,7 @@ void dTransform2VSetPosition(tCD_Handle transform, dVector2f position) {
     trans->position.x = position.x;
     trans->position.y = position.y;
 }
+
 void dTransform2SetPosition(tCD_Handle transform,
                             float positionX, float positionY) {
     auto trans = transforms[transform].get();
@@ -107,22 +109,29 @@ void dTransform2SetPosition(tCD_Handle transform,
 float dTransform2GetPositionX(tCD_Handle transform) {
     return transforms[transform]->position.x;
 }
-void dTransform2SetPositionX(tCD_Handle transform, float x) {
-    transforms[transform]->position.x = x;
-}
 
 float dTransform2GetPositionY(tCD_Handle transform) {
     return transforms[transform]->position.y;
 }
-void dTransform2SetPositionY(tCD_Handle transform, float y) {
-    transforms[transform]->position.y = y;
+
+void dTransform2AddPositionX(tCD_Handle transform, float dx) {
+    transforms[transform]->position.x += dx;
+}
+
+void dTransform2AddPositionY(tCD_Handle transform, float dy) {
+    transforms[transform]->position.y += dy;
 }
 
 float dTransform2GetRotation(tCD_Handle transform) {
     return transforms[transform]->rotation;
 }
+
 void dTransform2SetRotation(tCD_Handle transform, float rotation) {
     transforms[transform]->rotation = rotation;
+}
+
+void dTransform2AddRotation(tCD_Handle transform, float drotation) {
+    transforms[transform]->rotation += drotation;
 }
 
 void dTransform2VSetScale(tCD_Handle transform, dVector2f scale) {
@@ -130,6 +139,7 @@ void dTransform2VSetScale(tCD_Handle transform, dVector2f scale) {
     trans->scale.x = scale.x;
     trans->scale.y = scale.y;
 }
+
 void dTransform2SetScale(tCD_Handle transform,
                          float scaleX, float scaleY) {
     auto trans = transforms[transform].get();
@@ -140,13 +150,7 @@ void dTransform2SetScale(tCD_Handle transform,
 float dTransform2GetScaleX(tCD_Handle transform) {
     return transforms[transform]->scale.x;
 }
-void dTransform2SetScaleX(tCD_Handle transform, float x) {
-    transforms[transform]->scale.x = x;
-}
 
 float dTransform2GetScaleY(tCD_Handle transform) {
     return transforms[transform]->scale.y;
-}
-void dTransform2SetScaleY(tCD_Handle transform, float y) {
-    transforms[transform]->scale.y = y;
 }
