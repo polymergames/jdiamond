@@ -52,6 +52,9 @@ tCD_Handle dTransform2MakeTransform(float positionX, float positionY,
 }
 
 void dTransform2DestroyTransform(tCD_Handle transform) {
+    // SparseVector.erase doesn't immediately destroy the element,
+    // so we set it to nullptr to make sure it's destroyed.
+    transforms[transform] = nullptr;
     transforms.erase(transform);
 }
 

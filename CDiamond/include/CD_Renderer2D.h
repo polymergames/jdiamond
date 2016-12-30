@@ -62,8 +62,14 @@ void dRenderComponent2DSetLayer(tCD_Handle renderComponent,
                                 tCD_RenderLayer newLayer);
 
 dVector2f dRenderComponent2DGetPivot(tCD_Handle renderComponent);
+
+float dRenderComponent2DGetPivotX(tCD_Handle renderComponent);
+float dRenderComponent2DGetPivotY(tCD_Handle renderComponent);
+
+void dRenderComponent2DVSetPivot(tCD_Handle renderComponent,
+                                 dVector2f newPivot);
 void dRenderComponent2DSetPivot(tCD_Handle renderComponent,
-                                dVector2f newPivot);
+                                float newPivotX, float newPivotY);
 
 void dRenderComponent2DFlipX(tCD_Handle renderComponent);
 void dRenderComponent2DFlipY(tCD_Handle renderComponent);

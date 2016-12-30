@@ -63,6 +63,9 @@ tCD_Handle dRenderer2DMakeRenderComponent(tCD_Handle transform,
 }
 
 void dRenderer2DDestroyRenderComponent(tCD_Handle renderComponent) {
+    // SparseVector.erase doesn't immediately destroy the element,
+    // so we set it to nullptr to make sure it's destroyed.
+    renderComponents[renderComponent] = nullptr;
     renderComponents.erase(renderComponent);
 }
 
@@ -88,10 +91,24 @@ dVector2f dRenderComponent2DGetPivot(tCD_Handle renderComponent) {
     auto pivot = renderComponents[renderComponent]->getPivot();
     return {pivot.x, pivot.y};
 }
-void dRenderComponent2DSetPivot(tCD_Handle renderComponent,
-                                dVector2f newPivot) {
+
+float dRenderComponent2DGetPivotX(tCD_Handle renderComponent) {
+    return renderComponents[renderComponent]->getPivot().x;
+}
+float dRenderComponent2DGetPivotY(tCD_Handle renderComponent) {
+    return renderComponents[renderComponent]->getPivot().y;
+}
+
+void dRenderComponent2DVSetPivot(tCD_Handle renderComponent,
+                                 dVector2f newPivot) {
     renderComponents[renderComponent]->setPivot(
         Vector2<tD_pos>((tD_pos)(newPivot.x), (tD_pos)(newPivot.y))
+    );
+}
+void dRenderComponent2DSetPivot(tCD_Handle renderComponent,
+                                float newPivotX, float newPivotY) {
+    renderComponents[renderComponent]->setPivot(
+        Vector2<tD_pos>((tD_pos)newPivotX, (tD_pos)newPivotY)
     );
 }
 
