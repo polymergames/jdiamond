@@ -24,6 +24,7 @@ set(CMAKE_CXX_FLAGS -std=c++11)
 
 # Header includes
 include_directories(
+	include
 	extern/Diamond/include/backend
 	extern/Diamond/include
 	extern/DiamondUtils/include
@@ -46,7 +47,7 @@ link_directories(extern/Diamond/lib extern/Quantum2D/lib)
 
 
 # Get source files
-set(SOURCES CDiamond.cpp)
+file(GLOB_RECURSE SOURCES src/*.cpp)
 
 
 # Build

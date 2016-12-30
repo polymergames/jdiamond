@@ -1,23 +1,21 @@
 
 var ffi = require('ffi');
 
-var Diamond = ffi.Library('cDiamond/build/libCDiamond', {
-    'configureName': ['void', ['string']],
-    'configureGraphics': ['void', ['int', 'int', 'bool', 'bool']],
-    'configureAudio': ['void', ['int', 'int', 'int']],
-    'initEngine': ['bool', []],
-    'shutdownEngine': ['void', []]
+var Diamond = ffi.Library('CDiamond/build/libCDiamond', {
+    'dEngine2DConfigureGraphics': ['void', ['string','int', 'int', 'bool', 'bool']],
+    'dEngine2DConfigureAudio': ['void', ['int', 'int', 'int']],
+    'dEngine2DInit': ['bool', []],
+    'dEngine2DDestroy': ['void', []]
 });
 
-Diamond.configureName("A game without a name");
-Diamond.configureGraphics(1280, 720, false, true);
+Diamond.dEngine2DConfigureGraphics("A game without a name", 1280, 720, false, true);
 
-if (Diamond.initEngine()) {
+if (Diamond.dEngine2DInit()) {
     var running = true;
 
     while (running) {
         //
     };
 
-    Diamond.shutdownEngine();
+    Diamond.dEngine2DDestroy();
 };

@@ -14,40 +14,34 @@
     limitations under the License.
 */
 
-#include "CDiamond.h"
-
-#include "D_Config.h"
-#include "D_Engine2D.h"
+#include "CD_Engine2D.h"
+#include "CD_Game2D.h"
 using namespace Diamond;
-
 
 static Config config;
 static Engine2D* engine = nullptr;
 
-
-void configureName(char* gameName) {
-    config.game_name = gameName;
-}
-
-void configureGraphics(int windowWidth,
-                       int windowHeight,
-                       bool fullscreen,
-                       bool vsync) {
+void dEngine2DConfigureGraphics(char* windowTitle,
+                                int windowWidth,
+                                int windowHeight,
+                                bool fullscreen,
+                                bool vsync) {
+    config.game_name = windowTitle;
     config.window_width = windowWidth;
     config.window_height = windowHeight;
     config.fullscreen = fullscreen;
     config.vsync = vsync;
 }
 
-void configureAudio(int numChannels,
-                    int frequency,
-                    int sampleSize) {
+void dEngine2DConfigureAudio(int numChannels,
+                             int frequency,
+                             int sampleSize) {
     config.audio_channels = numChannels < 2 ? D_MONO : D_STEREO;
     config.audio_out_freq = frequency;
     config.audio_out_sample_size = sampleSize;
 }
 
-bool initEngine() {
+bool dEngine2DInit() {
     bool success = true;
     engine = new Engine2D(config, success);
 
@@ -59,7 +53,18 @@ bool initEngine() {
     return success;
 }
 
-void shutdownEngine() {
+void dEngine2DLaunchGame() {
+    auto game = dGame2DGetGame();
+    if (engine && game) {
+        engine->launch(*game);
+    }
+}
+
+void dEngine2DDestroy() {
     delete engine;
     engine = nullptr;
+}
+
+Engine2D* dEngine2DGetEngine() {
+    return engine;
 }
