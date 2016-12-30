@@ -14,12 +14,47 @@
     limitations under the License.
 */
 
+#ifndef D_CDIAMOND_H
+#define D_CDIAMOND_H
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-    int square(int n);
+    /**
+     * Sets the game window's title.
+     */
+    void configureName(char* gameName);
+
+    void configureGraphics(int windowWidth,
+                           int windowHeight,
+                           bool fullscreen,
+                           bool vsync);
+
+    /**
+     * numChannels should be 1 or 2, for mono or stereo, respectively.
+     * frequency is in hertz.
+     * sampleSize is in bytes.
+     */
+    void configureAudio(int numChannels,
+                        int frequency,
+                        int sampleSize);
+
+    /**
+     * Initializes the game engine and all subsystems.
+     * Call configure_ functions before calling this.
+     * Must call this before using any other engine functions.
+     */
+    bool initEngine();
+
+    /**
+     * Frees all engine/game resources and ends the game.
+     */
+    void shutdownEngine();
+
 
 #ifdef __cplusplus
 }
 #endif
+
+#endif // D_CDIAMOND_H
