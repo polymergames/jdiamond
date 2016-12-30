@@ -53,16 +53,16 @@ bool dEngine2DInit() {
     return success;
 }
 
+void dEngine2DDestroy() {
+    delete engine;
+    engine = nullptr;
+}
+
 void dEngine2DLaunchGame() {
     auto game = dGame2DGetGame();
     if (engine && game) {
         engine->launch(*game);
     }
-}
-
-void dEngine2DDestroy() {
-    delete engine;
-    engine = nullptr;
 }
 
 Engine2D* dEngine2DGetEngine() {

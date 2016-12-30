@@ -49,15 +49,15 @@ void dEngine2DConfigureAudio(int numChannels,
 bool dEngine2DInit();
 
 /**
+ * Frees all engine resources.
+ */
+void dEngine2DDestroy();
+
+/**
  * Launches the game in CD_Game2D and begins the game loop.
  * Requires that dGame2DInit was called first.
  */
 void dEngine2DLaunchGame();
-
-/**
- * Frees all engine resources.
- */
-void dEngine2DDestroy();
 
 Diamond::Engine2D* dEngine2DGetEngine();
 

@@ -17,6 +17,7 @@
 #ifndef D_CD_RENDERER2D_H
 #define D_CD_RENDERER2D_H
 
+#include "D_Renderer2D.h"
 #include "CD_typedefs.h"
 
 typedef int tCD_RenderLayer;
@@ -26,11 +27,22 @@ extern "C" {
 #endif
 
 /**
- * Returns INVALID_HANDLE if texture failed to load.
+ * Call this before using any other renderer functions.
+ * Requires that dEngine2DInit was called first.
+ */
+bool dRenderer2DInit();
+
+void dRenderer2DDestroy();
+
+/**
+ * Returns CD_INVALID_HANDLE if texture failed to load.
  */
 tCD_Handle dRenderer2DLoadTexture(char* path);
 
 void dRenderer2DDestroyTexture(tCD_Handle texture);
+
+Diamond::SharedPtr<Diamond::Texture>&
+dRenderer2DGetTexture(tCD_Handle texture);
 
 
 tCD_Handle dRenderer2DMakeRenderComponent(tCD_Handle transform,
@@ -39,24 +51,25 @@ tCD_Handle dRenderer2DMakeRenderComponent(tCD_Handle transform,
 
 void dRenderer2DDestroyRenderComponent(tCD_Handle renderComponent);
 
+Diamond::SharedPtr<Diamond::RenderComponent2D>&
+dRenderComponent2DGetRenderComponent(tCD_Handle renderComponent);
 
-/**
- * Renders all the render components currently in the renderer.
- */
-void dRenderer2DRenderAll();
+void dRenderComponent2DSetSprite(tCD_Handle renderComponent,
+                                 tCD_Handle texture);
 
+tCD_RenderLayer dRenderComponent2DGetLayer(tCD_Handle renderComponent);
+void dRenderComponent2DSetLayer(tCD_Handle renderComponent,
+                                tCD_RenderLayer newLayer);
 
-tCD_Handle dRenderComponent2DGetSprite();
-void dRenderComponent2DSetSprite(tCD_Handle texture);
+dVector2f dRenderComponent2DGetPivot(tCD_Handle renderComponent);
+void dRenderComponent2DSetPivot(tCD_Handle renderComponent,
+                                dVector2f newPivot);
 
-tCD_RenderLayer dRenderComponent2DGetLayer();
-void dRenderComponent2DSetLayer(tCD_RenderLayer newLayer);
+void dRenderComponent2DFlipX(tCD_Handle renderComponent);
+void dRenderComponent2DFlipY(tCD_Handle renderComponent);
 
-void dRenderComponent2DFlipX();
-void dRenderComponent2DFlipY();
-
-bool dRenderComponent2DIsFlippedX();
-bool dRenderComponent2DIsFlippedY();
+bool dRenderComponent2DIsFlippedX(tCD_Handle renderComponent);
+bool dRenderComponent2DIsFlippedY(tCD_Handle renderComponent);
 
 
 #ifdef __cplusplus

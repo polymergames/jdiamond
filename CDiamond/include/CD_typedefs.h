@@ -20,6 +20,17 @@
 #include "D_typedefs.h"
 
 typedef int tCD_Handle;
-#define INVALID_HANDLE -1;
+#define CD_INVALID_HANDLE -1;
+
+typedef struct {
+    float x;
+    float y;
+} dVector2f;
+
+typedef struct {
+    dVector2f position;
+    float rotation;
+    dVector2f scale;
+} dTransform2f;
 
 #endif // D_CD_TYPEDEFS_H
