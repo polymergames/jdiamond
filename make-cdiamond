@@ -2,5 +2,5 @@
 
 set -e
 
-cd CDiamond/build
+cd src/CDiamond/build
 make

@@ -1,7 +1,7 @@
-var ffi = require('ffi');
-var ref = require('ref');
+const ffi = require('ffi');
+const ref = require('ref');
 
-var Diamond = ffi.Library('CDiamond/build/libCDiamond', {
+const Diamond = ffi.Library('src/CDiamond/build/libCDiamond', {
     // Engine2D
     'dEngine2DConfigureGraphics': ['void', ['string', 'int', 'int', 'bool', 'bool']],
     'dEngine2DConfigureAudio': ['void', ['int', 'int', 'int']],
@@ -86,3 +86,19 @@ if (Diamond.dEngine2DInit() &&
     Diamond.dTransform2Destroy();
     Diamond.dEngine2DDestroy();
 };
+
+
+exports.Engine2D = class Engine2D {
+    constructor(callback) {
+        if (!(Diamond.dEngine2DInit() &&
+              Diamond.dTransform2Init() &&
+              Diamond.dRenderer2DInit())) {
+            callback(false)
+        }
+        callback(true)
+    }
+
+    get renderer() {
+        // return renderer
+    }
+}

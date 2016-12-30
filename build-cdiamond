@@ -2,8 +2,8 @@
 
 set -e
 
-cd CDiamond
-rm -r build
+cd src/CDiamond
+rm -rf build
 mkdir build
 cd build
 cmake ..
