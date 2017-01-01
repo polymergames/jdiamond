@@ -43,9 +43,6 @@ void dTransform2DestroyTransform(tCD_Handle transform);
 
 dTransform2f dTransform2GetTransform(tCD_Handle transform);
 
-Diamond::SharedPtr<Diamond::DTransform2>&
-dTransform2GetTransformPtr(tCD_Handle transform);
-
 void dTransform2VSetTransform(tCD_Handle transform,
                               dVector2f position,
                               float rotation,
@@ -82,5 +79,8 @@ float dTransform2GetScaleY(tCD_Handle transform);
 #ifdef __cplusplus
 }
 #endif
+
+Diamond::SharedPtr<Diamond::DTransform2>&
+dTransform2GetTransformPtr(tCD_Handle transform);
 
 #endif // D_CD_TRANSFORM2_H

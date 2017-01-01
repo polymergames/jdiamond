@@ -59,10 +59,10 @@ void dEngine2DDestroy();
  */
 void dEngine2DLaunchGame();
 
-Diamond::Engine2D* dEngine2DGetEngine();
-
 #ifdef __cplusplus
 }
 #endif
+
+Diamond::Engine2D* dEngine2DGetEngine();
 
 #endif // D_CD_ENGINE2D_H

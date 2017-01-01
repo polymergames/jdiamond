@@ -41,18 +41,11 @@ tCD_Handle dRenderer2DLoadTexture(char* path);
 
 void dRenderer2DDestroyTexture(tCD_Handle texture);
 
-Diamond::SharedPtr<Diamond::Texture>&
-dRenderer2DGetTexture(tCD_Handle texture);
-
-
 tCD_Handle dRenderer2DMakeRenderComponent(tCD_Handle transform,
                                           tCD_Handle texture,
                                           tCD_RenderLayer layer);
 
 void dRenderer2DDestroyRenderComponent(tCD_Handle renderComponent);
-
-Diamond::SharedPtr<Diamond::RenderComponent2D>&
-dRenderComponent2DGetRenderComponent(tCD_Handle renderComponent);
 
 void dRenderComponent2DSetSprite(tCD_Handle renderComponent,
                                  tCD_Handle texture);
@@ -81,5 +74,11 @@ bool dRenderComponent2DIsFlippedY(tCD_Handle renderComponent);
 #ifdef __cplusplus
 }
 #endif
+
+Diamond::SharedPtr<Diamond::Texture>&
+dRenderer2DGetTexture(tCD_Handle texture);
+
+Diamond::SharedPtr<Diamond::RenderComponent2D>&
+dRenderComponent2DGetRenderComponent(tCD_Handle renderComponent);
 
 #endif // D_CD_RENDERER2D_H

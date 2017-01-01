@@ -43,10 +43,10 @@ bool dGame2DInit(dGame2DVoidFunc   initFunc,
  */
 void dGame2DDestroy();
 
-Diamond::Game2D* dGame2DGetGame();
-
 #ifdef __cplusplus
 }
 #endif
+
+Diamond::Game2D* dGame2DGetGame();
 
 #endif // D_CD_GAME2D_H
