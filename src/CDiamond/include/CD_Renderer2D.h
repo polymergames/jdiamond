@@ -18,6 +18,7 @@
 #define D_CD_RENDERER2D_H
 
 #include "D_Renderer2D.h"
+#include "D_TextureFactory.h"
 #include "CD_typedefs.h"
 
 typedef int tCD_RenderLayer;
@@ -75,10 +76,15 @@ bool dRenderComponent2DIsFlippedY(tCD_Handle renderComponent);
 }
 #endif
 
+Diamond::Renderer2D* dRenderer2DGetRenderer();
+
 Diamond::SharedPtr<Diamond::Texture>&
 dRenderer2DGetTexture(tCD_Handle texture);
 
 Diamond::SharedPtr<Diamond::RenderComponent2D>&
 dRenderComponent2DGetRenderComponent(tCD_Handle renderComponent);
+
+Diamond::TextureFactory*
+dGetTextureFactory();
 
 #endif // D_CD_RENDERER2D_H

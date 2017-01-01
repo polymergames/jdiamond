@@ -22,24 +22,27 @@
 using namespace Diamond;
 
 static Renderer2D* renderer = nullptr;
+static TextureFactory* textureFactory = nullptr;
 static SparseVector<SharedPtr<RenderComponent2D>, tCD_Handle> renderComponents;
 static SparseVector<SharedPtr<Texture>, tCD_Handle> textures;
 
 bool dRenderer2DInit() {
     auto engine = dEngine2DGetEngine();
-    if (engine)
+    if (engine) {
         renderer = engine->getRenderer();
+        textureFactory = new TextureFactory(renderer);
+    }
     return renderer != nullptr;
 }
 
 void dRenderer2DDestroy() {
-    renderer = nullptr;
     renderComponents.clear();
     textures.clear();
+    renderer = nullptr;
 }
 
 tCD_Handle dRenderer2DLoadTexture(char* path) {
-    auto texture = renderer->loadTexture(path);
+    auto texture = textureFactory->loadTexture(path);
     if (!texture) return CD_INVALID_HANDLE;
     return textures.insert(texture);
 }
@@ -124,4 +127,12 @@ bool dRenderComponent2DIsFlippedX(tCD_Handle renderComponent) {
 }
 bool dRenderComponent2DIsFlippedY(tCD_Handle renderComponent) {
     return renderComponents[renderComponent]->isFlippedY();
+}
+
+TextureFactory* dGetTextureFactory() {
+    return textureFactory;
+}
+
+Renderer2D* dRenderer2DGetRenderer() {
+    return renderer;
 }

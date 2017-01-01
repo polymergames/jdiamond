@@ -29,10 +29,10 @@ bool dTransform2Init() {
 }
 
 void dTransform2Destroy() {
+    transforms.clear();
     // note: we don't own the engine, so we don't destroy it.
     // we were just borrowing a pointer to it.
     engine = nullptr;
-    transforms.clear();
 }
 
 tCD_Handle dTransform2VMakeTransform(dVector2f position,
