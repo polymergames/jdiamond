@@ -1,6 +1,23 @@
+/*
+    Copyright 2017 Ahnaf Siddiqui
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
 const ffi = require('ffi');
 const ref = require('ref');
 
+// This is the bridge to native Diamond functions.
 const Diamond = ffi.Library('src/CDiamond/build/libCDiamond', {
     // Engine2D
     'dEngine2DConfigureGraphics': ['void', ['string', 'int', 'int', 'bool', 'bool']],
@@ -48,59 +65,12 @@ const Diamond = ffi.Library('src/CDiamond/build/libCDiamond', {
     'dRenderComponent2DIsFlippedY': ['bool', ['int']]
 });
 
-// Diamond.dEngine2DConfigureGraphics("Best Game",
-//                                    1280, 720, // window resolution
-//                                    false, // fullscreen
-//                                    false); // vsync
-//
-// if (Diamond.dEngine2DInit() &&
-//     Diamond.dTransform2Init() &&
-//     Diamond.dRenderer2DInit()) {
-//
-//     var transform = -1;
-//     var renderComp = -1;
-//     var direction = 1;
-//
-//     var gameInit = ffi.Callback('void', [], function() {
-//         console.log("Game initializing!");
-//         transform = Diamond.dTransform2MakeTransform(600, 350, 0, 1, 1);
-//         renderComp = Diamond.dRenderer2DMakeRenderComponent(
-//             transform,
-//             Diamond.dRenderer2DLoadTexture("laserShip.png"),
-//             0
-//         );
-//     });
-//
-//     var gameUpdate = ffi.Callback('void', ['int'], function(delta) {
-//         console.log("Update: ", delta, " ms");
-//         Diamond.dTransform2AddPositionX(transform, delta * direction);
-//         Diamond.dTransform2AddPositionY(transform, delta * direction);
-//         Diamond.dTransform2AddRotation(transform, delta * direction);
-//         direction *= -1;
-//     });
-//
-//     Diamond.dGame2DInit(gameInit, gameUpdate, ref.NULL, ref.NULL);
-//     Diamond.dEngine2DLaunchGame();
-//
-//     Diamond.dGame2DDestroy();
-//     Diamond.dRenderer2DDestroy();
-//     Diamond.dTransform2Destroy();
-//     Diamond.dEngine2DDestroy();
-// };
 
+// API starts here
 
-// API
-// TODO: test performance change from caching some values
-// (ex. position data in transform) to return when getting
-// and update when setting, in order to avoid making
-// a call to the Diamond backend every time a value is read.
-// This may not be worth it, because game logic seems to be more
-// write-heavy than read-heavy (most of the read-heavy stuff
-// probably happens in the physics engine, which is in the
-// backend anyways, and in game logic-specific data
-// that isn't stored in the Diamond backend).
-
-// Configuration for Diamond engine with default values.
+/**
+ * Configuration for Diamond engine with default values.
+ */
 exports.Config = function() {
     this.windowTitle = "A Game Without a Name";
     this.windowWidth = 1280;
@@ -112,7 +82,9 @@ exports.Config = function() {
     this.audioSampleSize = 2048; // bytes
 }
 
-// Initializes Diamond engine and its subsystems.
+/**
+ * Initializes Diamond engine and its subsystems.
+ */
 exports.init = function(config, callback) {
     var success = true;
 
@@ -141,7 +113,9 @@ exports.init = function(config, callback) {
         callback(success);
 }
 
-// Begins the game loop in the Diamond backend.
+/**
+ * Begins the game loop in the Diamond backend.
+ */
 exports.launch = function(update, postPhysicsUpdate, quit) {
     var updateCB = ref.NULL;
     var postPhysicsUpdateCB = ref.NULL;
@@ -161,7 +135,9 @@ exports.launch = function(update, postPhysicsUpdate, quit) {
     Diamond.dEngine2DLaunchGame();
 }
 
-// Frees all game and engine resources.
+/**
+ * Frees all game and engine resources.
+ */
 exports.cleanUp = function() {
     Diamond.dGame2DDestroy();
     Diamond.dRenderer2DDestroy();
@@ -172,6 +148,15 @@ exports.cleanUp = function() {
 // Objects of the following classes reference their corresponding
 // objects in the Diamond backend using a handle.
 
+// TODO: test performance change from caching some values
+// (ex. position data in transform) to return when getting
+// and update when setting, in order to avoid making
+// a call to the Diamond backend every time a value is read.
+// This may not be worth it, because game logic seems to be more
+// write-heavy than read-heavy (most of the read-heavy stuff
+// probably happens in the physics engine, which is in the
+// backend anyways, and in game logic-specific data
+// that isn't stored in the Diamond backend).
 exports.Transform2 = class Transform2 {
     constructor(position = {x: 0, y: 0},
                 rotation = 0,
@@ -284,7 +269,7 @@ exports.RenderComponent2D = class RenderComponent2D {
 
 exports.renderer = {
     loadTexture: function(path) {
-        var handle = Diamond.dRenderer2DLoadTexture(path);
+        const handle = Diamond.dRenderer2DLoadTexture(path);
         if (handle < 0)
             return null;
         return {handle: handle}
@@ -295,34 +280,15 @@ exports.renderer = {
     }
 }
 
-
-// Test
-
-const config = new exports.Config();
-config.windowTitle = "Best Game";
-
-var engineStarted = false;
-exports.init(config, res => engineStarted = res);
-
-if (engineStarted) {
-    const shipSprite = exports.renderer.loadTexture("laserShip.png");
-
-    const laserShip = new function() {
-        this.transform = new exports.Transform2({x: 600, y: 350});
-        this.renderer = new exports.RenderComponent2D(this.transform, shipSprite);
-    };
-
-    var direction = 1;
-
-    const update = function(delta) {
-        // laserShip.renderer.flipX();
-        laserShip.renderer.flipY();
-        laserShip.transform.position.add({x: delta * direction, y: delta * direction});
-        laserShip.transform.rotation += delta * direction;
-        direction *= -1;
+exports.Math = {
+    RAD2DEG: 180 / Math.PI,
+    DEG2RAD: Math.PI / 180,
+    rotateVector: function(vec, radians) {
+        const sinrad = Math.sin(radians);
+        const cosrad = Math.cos(radians);
+        return {
+            x: vec.x * cosrad - vec.y * sinrad,
+            y: vec.x * sinrad + vec.y * cosrad
+        };
     }
-
-    exports.launch(update);
-
-    exports.cleanUp();
 }
