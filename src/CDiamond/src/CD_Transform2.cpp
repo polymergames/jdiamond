@@ -114,6 +114,16 @@ float dTransform2GetPositionY(tCD_Handle transform) {
     return transforms[transform]->position.y;
 }
 
+void dTransform2VAddPosition(tCD_Handle transform, dVector2f dpos) {
+    transforms[transform]->position.x += dpos.x;
+    transforms[transform]->position.y += dpos.y;
+}
+
+void dTransform2AddPosition(tCD_Handle transform, float dx, float dy) {
+    transforms[transform]->position.x += dx;
+    transforms[transform]->position.y += dy;
+}
+
 void dTransform2AddPositionX(tCD_Handle transform, float dx) {
     transforms[transform]->position.x += dx;
 }

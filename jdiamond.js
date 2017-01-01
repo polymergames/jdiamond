@@ -20,6 +20,7 @@ const Diamond = ffi.Library('src/CDiamond/build/libCDiamond', {
     'dTransform2SetPosition': ['void', ['int', 'float', 'float']],
     'dTransform2GetPositionX': ['float', ['int']],
     'dTransform2GetPositionY': ['float', ['int']],
+    'dTransform2AddPosition': ['void', ['int', 'float', 'float']],
     'dTransform2AddPositionX': ['void', ['int', 'float']],
     'dTransform2AddPositionY': ['void', ['int', 'float']],
     'dTransform2GetRotation': ['float', ['int']],
@@ -47,58 +48,281 @@ const Diamond = ffi.Library('src/CDiamond/build/libCDiamond', {
     'dRenderComponent2DIsFlippedY': ['bool', ['int']]
 });
 
-Diamond.dEngine2DConfigureGraphics("Best Game",
-                                   1280, 720, // window resolution
-                                   false, // fullscreen
-                                   false); // vsync
+// Diamond.dEngine2DConfigureGraphics("Best Game",
+//                                    1280, 720, // window resolution
+//                                    false, // fullscreen
+//                                    false); // vsync
+//
+// if (Diamond.dEngine2DInit() &&
+//     Diamond.dTransform2Init() &&
+//     Diamond.dRenderer2DInit()) {
+//
+//     var transform = -1;
+//     var renderComp = -1;
+//     var direction = 1;
+//
+//     var gameInit = ffi.Callback('void', [], function() {
+//         console.log("Game initializing!");
+//         transform = Diamond.dTransform2MakeTransform(600, 350, 0, 1, 1);
+//         renderComp = Diamond.dRenderer2DMakeRenderComponent(
+//             transform,
+//             Diamond.dRenderer2DLoadTexture("laserShip.png"),
+//             0
+//         );
+//     });
+//
+//     var gameUpdate = ffi.Callback('void', ['int'], function(delta) {
+//         console.log("Update: ", delta, " ms");
+//         Diamond.dTransform2AddPositionX(transform, delta * direction);
+//         Diamond.dTransform2AddPositionY(transform, delta * direction);
+//         Diamond.dTransform2AddRotation(transform, delta * direction);
+//         direction *= -1;
+//     });
+//
+//     Diamond.dGame2DInit(gameInit, gameUpdate, ref.NULL, ref.NULL);
+//     Diamond.dEngine2DLaunchGame();
+//
+//     Diamond.dGame2DDestroy();
+//     Diamond.dRenderer2DDestroy();
+//     Diamond.dTransform2Destroy();
+//     Diamond.dEngine2DDestroy();
+// };
 
-if (Diamond.dEngine2DInit() &&
-    Diamond.dTransform2Init() &&
-    Diamond.dRenderer2DInit()) {
 
-    var transform = -1;
-    var renderComp = -1;
-    var direction = 1;
+// API
+// TODO: test performance change from caching some values
+// (ex. position data in transform) to return when getting
+// and update when setting, in order to avoid making
+// a call to the Diamond backend every time a value is read.
+// This may not be worth it, because game logic seems to be more
+// write-heavy than read-heavy (most of the read-heavy stuff
+// probably happens in the physics engine, which is in the
+// backend anyways, and in game logic-specific data
+// that isn't stored in the Diamond backend).
 
-    var gameInit = ffi.Callback('void', [], function() {
-        console.log("Game initializing!");
-        transform = Diamond.dTransform2MakeTransform(600, 350, 0, 1, 1);
-        renderComp = Diamond.dRenderer2DMakeRenderComponent(
-            transform,
-            Diamond.dRenderer2DLoadTexture("laserShip.png"),
-            0
+// Configuration for Diamond engine with default values.
+exports.Config = function() {
+    this.windowTitle = "A Game Without a Name";
+    this.windowWidth = 1280;
+    this.windowHeight = 720;
+    this.fullscreen = false;
+    this.vsync = false;
+    this.numAudioChannels = 2;
+    this.audioFrequency = 44100; // hertz
+    this.audioSampleSize = 2048; // bytes
+}
+
+// Initializes Diamond engine and its subsystems.
+exports.init = function(config, callback) {
+    var success = true;
+
+    if (config) {
+        Diamond.dEngine2DConfigureGraphics(
+            config.windowTitle,
+            config.windowWidth,
+            config.windowHeight,
+            config.fullscreen,
+            config.vsync
         );
-    });
+        Diamond.dEngine2DConfigureAudio(
+            config.numAudioChannels,
+            config.audioFrequency,
+            config.audioSampleSize
+        );
+    }
 
-    var gameUpdate = ffi.Callback('void', ['int'], function(delta) {
-        console.log("Update: ", delta, " ms");
-        Diamond.dTransform2AddPositionX(transform, delta * direction);
-        Diamond.dTransform2AddPositionY(transform, delta * direction);
-        Diamond.dTransform2AddRotation(transform, delta * direction);
-        direction *= -1;
-    });
+    if (!(Diamond.dEngine2DInit() &&
+          Diamond.dTransform2Init() &&
+          Diamond.dRenderer2DInit())) {
+        success = false;
+    }
 
-    Diamond.dGame2DInit(gameInit, gameUpdate, ref.NULL, ref.NULL);
+    if (callback)
+        callback(success);
+}
+
+// Begins the game loop in the Diamond backend.
+exports.launch = function(update, postPhysicsUpdate, quit) {
+    var updateCB = ref.NULL;
+    var postPhysicsUpdateCB = ref.NULL;
+    var quitCB = ref.NULL;
+
+    if (update) {
+        updateCB = ffi.Callback('void', ['int'], update);
+    }
+    if (postPhysicsUpdate) {
+        postPhysicsUpdateCB = ffi.Callback('void', ['int'], postPhysicsUpdate);
+    }
+    if (quit) {
+        quitCB = ffi.Callback('void', [], quit);
+    }
+
+    Diamond.dGame2DInit(ref.NULL, updateCB, postPhysicsUpdateCB, quitCB);
     Diamond.dEngine2DLaunchGame();
+}
 
+// Frees all game and engine resources.
+exports.cleanUp = function() {
     Diamond.dGame2DDestroy();
     Diamond.dRenderer2DDestroy();
     Diamond.dTransform2Destroy();
     Diamond.dEngine2DDestroy();
-};
+}
 
+// Objects of the following classes reference their corresponding
+// objects in the Diamond backend using a handle.
 
-exports.Engine2D = class Engine2D {
-    constructor(callback) {
-        if (!(Diamond.dEngine2DInit() &&
-              Diamond.dTransform2Init() &&
-              Diamond.dRenderer2DInit())) {
-            callback(false)
-        }
-        callback(true)
+exports.Transform2 = class Transform2 {
+    constructor(position = {x: 0, y: 0},
+                rotation = 0,
+                scale    = {x: 1, y: 1}) {
+        this.handle = Diamond.dTransform2MakeTransform(
+            position.x, position.y, rotation, scale.x, scale.y
+        );
+    }
+    destroy() {
+        Diamond.dTransform2DestroyTransform(this.handle);
     }
 
-    get renderer() {
-        // return renderer
+    // note: setting position.x or position.y directly
+    // will not change the underlying Diamond transform.
+    // position can only be changed by setting position
+    // to a new {x, y} object, or by using add function.
+    get position() {
+        return {
+            x: Diamond.dTransform2GetPositionX(this.handle),
+            y: Diamond.dTransform2GetPositionY(this.handle),
+            add: function(dpos) {
+                Diamond.dTransform2AddPosition(this.handle, dpos.x, dpos.y);
+            },
+            addX: function(dx) {
+                Diamond.dTransform2AddPositionX(this.handle, dx);
+            },
+            addY: function(dy) {
+                Diamond.dTransform2AddPositionY(this.handle, dy);
+            }
+        };
     }
+    set position(position) {
+        Diamond.dTransform2SetPosition(this.handle, position.x, position.y);
+    }
+
+    get rotation() {
+        return Diamond.dTransform2GetRotation(this.handle);
+    }
+    set rotation(rotation) {
+        Diamond.dTransform2SetRotation(this.handle, rotation);
+    }
+
+    // see comment for setting position.x and position.y,
+    // applies to scale as well.
+    get scale() {
+        return {
+            x: Diamond.dTransform2GetScaleX(this.handle),
+            y: Diamond.dTransform2GetScaleY(this.handle)
+        };
+    }
+    set scale(scale) {
+        Diamond.dTransform2SetScale(this.handle, scale.x, scale.y);
+    }
+
+    // TODO: this doesn't seem to work
+    toString() {
+        return "handle: " + this.handle + ", " +
+               "position: " + this.position.toString() + ", " +
+               "rotation: " + this.rotation.toString() + ", " +
+               "scale: " + this.scale.toString();
+    }
+}
+
+exports.RenderComponent2D = class RenderComponent2D {
+    constructor(transform, texture, layer = 0) {
+        this.handle = Diamond.dRenderer2DMakeRenderComponent(
+            transform.handle, texture.handle, layer
+        );
+    }
+    destroy() {
+        Diamond.dRenderer2DDestroyRenderComponent(this.handle);
+    }
+
+    // don't yet support getting a sprite- sorry
+    set sprite(texture) {
+        Diamond.dRenderComponent2DSetSprite(this.handle, texture.handle);
+    }
+
+    get layer() {
+        return Diamond.dRenderComponent2DGetLayer(this.handle);
+    }
+    set layer(layer) {
+        Diamond.dRenderComponent2DSetLayer(this.handle, layer);
+    }
+
+    get pivot() {
+        return {
+            x: Diamond.dRenderComponent2DGetPivotX(this.handle),
+            y: Diamond.dRenderComponent2DGetPivotY(this.handle)
+        };
+    }
+    set pivot(pivot) {
+        Diamond.dRenderComponent2DSetPivot(this.handle, pivot.x, pivot.y);
+    }
+
+    flipX() {
+        Diamond.dRenderComponent2DFlipX(this.handle);
+    }
+    flipY() {
+        Diamond.dRenderComponent2DFlipY(this.handle);
+    }
+
+    get isFlippedX() {
+        return Diamond.dRenderComponent2DIsFlippedX(this.handle);
+    }
+    get isFlippedY() {
+        return Diamond.dRenderComponent2DIsFlippedY(this.handle);
+    }
+}
+
+exports.renderer = {
+    loadTexture: function(path) {
+        var handle = Diamond.dRenderer2DLoadTexture(path);
+        if (handle < 0)
+            return null;
+        return {handle: handle}
+    },
+
+    destroyTexture: function(texture) {
+        Diamond.dRenderer2DDestroyTexture(texture.handle);
+    }
+}
+
+
+// Test
+
+const config = new exports.Config();
+config.windowTitle = "Best Game";
+
+var engineStarted = false;
+exports.init(config, res => engineStarted = res);
+
+if (engineStarted) {
+    const shipSprite = exports.renderer.loadTexture("laserShip.png");
+
+    const laserShip = new function() {
+        this.transform = new exports.Transform2({x: 600, y: 350});
+        this.renderer = new exports.RenderComponent2D(this.transform, shipSprite);
+    };
+
+    var direction = 1;
+
+    const update = function(delta) {
+        // laserShip.renderer.flipX();
+        laserShip.renderer.flipY();
+        laserShip.transform.position.add({x: delta * direction, y: delta * direction});
+        laserShip.transform.rotation += delta * direction;
+        direction *= -1;
+    }
+
+    exports.launch(update);
+
+    exports.cleanUp();
 }

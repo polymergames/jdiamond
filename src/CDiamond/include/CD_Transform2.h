@@ -62,6 +62,9 @@ void dTransform2SetPosition(tCD_Handle transform,
 float dTransform2GetPositionX(tCD_Handle transform);
 float dTransform2GetPositionY(tCD_Handle transform);
 
+void dTransform2VAddPosition(tCD_Handle transform, dVector2f dpos);
+void dTransform2AddPosition(tCD_Handle transform, float dx, float dy);
+
 void dTransform2AddPositionX(tCD_Handle transform, float dx);
 void dTransform2AddPositionY(tCD_Handle transform, float dy);
 

@@ -31,7 +31,7 @@ public:
           postPhysicsUpdateFunc(postPhysicsUpdateFunc),
           quitFunc(quitFunc) {
 
-        initFunc();
+        if (initFunc) initFunc();
     }
 
     void update(tD_delta delta) override {
