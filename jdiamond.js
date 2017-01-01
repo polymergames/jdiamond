@@ -17,8 +17,10 @@
 const ffi = require('ffi');
 const ref = require('ref');
 
+const platformdir = process.platform
+
 // This is the bridge to native Diamond functions.
-const Diamond = ffi.Library(__dirname + '/src/CDiamond/build/libCDiamond', {
+const Diamond = ffi.Library(__dirname + '/src/CDiamond/lib/' + platformdir + '/libCDiamond', {
     // Engine2D
     'dEngine2DConfigureGraphics': ['void', ['string', 'int', 'int', 'bool', 'bool']],
     'dEngine2DConfigureAudio': ['void', ['int', 'int', 'int']],

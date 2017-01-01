@@ -4,3 +4,8 @@ set -e
 
 cd CDiamond/build
 make
+
+# this ensures that the platform directory name used
+# by this script is the same one used by jdiamond
+platformdir=$(node -p 'process.platform')
+mkdir -p ../lib/"$platformdir" && cp libCDiamond* ../lib/"$platformdir"/
