@@ -4,15 +4,21 @@
 # Exit if there's an error
 set -e
 
+# the delimiter used to separate keys and values in the input file
+SEP=":"
+
 # Check arguments
 if [ "$#" -lt 1 ]; then
     echo "Usage: diamondtojson filename"
     exit 1
 fi
 
+# Get delimiter
+if [ "$#" -gt 1 ]; then
+    SEP="$2"
+fi
+
 FILE="$1"
-# the delimiter used to separate keys and values in the input file
-SEP=":"
 
 # Add JSON outer brackets,
 # remove comments and empty lines,
