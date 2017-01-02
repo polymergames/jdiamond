@@ -359,3 +359,13 @@ exports.Math = {
         };
     }
 }
+
+exports.Util = {
+    objToKeyvalPairs: function(obj) {
+        var str = "";
+        for (var prop in obj) {
+            str += prop + ": " + obj[prop] + "\n";
+        }
+        return str;
+    }
+}

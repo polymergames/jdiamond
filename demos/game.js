@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-const Diamond = require('./jdiamond');
+const Diamond = require('../jdiamond');
 const fs = require('fs');
 
 const config = new Diamond.Config();
