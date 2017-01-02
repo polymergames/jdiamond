@@ -27,6 +27,12 @@ extern "C" {
 #endif
 
 /**
+ * Turns on game benchmarking and sets the file to output results.
+ * This should be called before dGame2DInit.
+ */
+void dGame2DBenchmark(char *filePath);
+
+/**
  * Initializes the game. Should be called before calling dEngine2DLaunchGame.
  * Requires that dEngine2DInit has been called first.
  * Any/all of the parameters are allowed to be NULL.

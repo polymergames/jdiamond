@@ -23,6 +23,7 @@ config.windowWidth = 1920;
 config.windowHeight = 1080;
 // config.fullscreen = true;
 config.vsync = false;
+config.benchmark = true;
 
 if (Diamond.init(config)) {
     // laser ship
@@ -38,7 +39,7 @@ if (Diamond.init(config)) {
     // var turnspeed = 0.2;
 
     // particle system
-    const particleConfig = JSON.parse(fs.readFileSync("bigfountain.json"));
+    const particleConfig = JSON.parse(fs.readFileSync("smallfountain.json"));
 
     const particles = new Diamond.ParticleEmitter2D(
         particleConfig, new Diamond.Transform2({x: 960, y: 540})

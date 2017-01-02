@@ -15,6 +15,10 @@
 */
 
 #include "CD_Game2D.h"
+
+#include <fstream>
+#include "D_Benchmark.h"
+#include "D_Log.h"
 #include "CD_Engine2D.h"
 using namespace Diamond;
 
@@ -25,17 +29,34 @@ public:
            FVoid initFunc = nullptr,
            FUpdate updateFunc = nullptr,
            FUpdate postPhysicsUpdateFunc = nullptr,
-           FVoid quitFunc = nullptr)
+           FVoid quitFunc = nullptr,
+           bool benchmark = false,
+           const std::string& benchmarkFile = "")
         : Game2D(engine),
           updateFunc(updateFunc),
           postPhysicsUpdateFunc(postPhysicsUpdateFunc),
           quitFunc(quitFunc) {
 
         if (initFunc) initFunc();
+
+        if (benchmark) {
+            benchmarkStream.open(benchmarkFile, std::ios::app);
+            if (!benchmarkStream.is_open())
+                Log::log("Failed to open " + benchmarkFile + " for benchmarking!");
+            else
+                benchmarkLogger = new BenchmarkLogger(benchmarkStream);
+        }
+    }
+
+    ~CDGame() {
+        delete benchmarkLogger;
+        if (benchmarkStream.is_open())
+            benchmarkStream.close();
     }
 
     void update(tD_delta delta) override {
         if (updateFunc) updateFunc(delta);
+        if (benchmarkLogger) benchmarkLogger->update(delta);
     }
 
     void postPhysicsUpdate(tD_delta delta) override {
@@ -50,10 +71,20 @@ public:
       FUpdate updateFunc;
       FUpdate postPhysicsUpdateFunc;
       FVoid quitFunc;
+
+      BenchmarkLogger *benchmarkLogger;
+      std::ofstream benchmarkStream;
 };
 
 
 static Game2D* game = nullptr;
+static bool benchmark = false;
+static std::string benchmarkFile = "";
+
+void dGame2DBenchmark(char *filePath) {
+    benchmark = true;
+    benchmarkFile = std::string(filePath);
+}
 
 bool dGame2DInit(dGame2DVoidFunc   initFunc,
                  dGame2DUpdateFunc updateFunc,
@@ -62,7 +93,8 @@ bool dGame2DInit(dGame2DVoidFunc   initFunc,
     auto engine = dEngine2DGetEngine();
     if (engine) {
         game = new CDGame<dGame2DVoidFunc, dGame2DUpdateFunc>(
-            *engine, initFunc, updateFunc, postPhysicsUpdateFunc, quitFunc
+            *engine, initFunc, updateFunc, postPhysicsUpdateFunc, quitFunc,
+            benchmark, benchmarkFile
         );
         return true;
     }

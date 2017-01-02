@@ -28,6 +28,7 @@ const Diamond = ffi.Library(__dirname + '/src/CDiamond/lib/' + platformdir + '/l
     'dEngine2DDestroy': ['void', []],
     'dEngine2DLaunchGame': ['void', []],
     // Game2D
+    'dGame2DBenchmark': ['void', ['string']],
     'dGame2DInit': ['bool', ['pointer', 'pointer', 'pointer', 'pointer']],
     'dGame2DDestroy': ['void', []],
     // Transform2
@@ -107,6 +108,8 @@ exports.Config = function() {
     // estimate for the max number of particles
     // that may be present at any time.
     this.particlePoolSize = 100;
+    this.benchmark = false;
+    this.benchmarkFile = "benchmark.log";
 }
 
 /**
@@ -128,6 +131,8 @@ exports.init = function(config) {
             config.audioFrequency,
             config.audioSampleSize
         );
+        if (config.benchmark)
+            Diamond.dGame2DBenchmark(config.benchmarkFile);
     }
 
     if (!(Diamond.dEngine2DInit() &&

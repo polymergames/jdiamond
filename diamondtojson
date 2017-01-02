@@ -1,0 +1,27 @@
+#!/bin/bash
+# This script converts Diamond key:value config files to JSON.
+
+# Exit if there's an error
+set -e
+
+# Check arguments
+if [ "$#" -lt 1 ]; then
+    echo "Usage: diamondtojson filename"
+    exit 1
+fi
+
+FILE="$1"
+
+# Add JSON outer brackets,
+# remove comments and empty lines,
+# add tab spaces, quotations, and comma to each line,
+# and remove comma from last line.
+echo "{"
+sed -e '/^#/d' \
+    -e '/^$/d' \
+    "$FILE" \
+    | awk -F ":[[:space:]]+" '$2 !~ /[0-9]/ && $2 !~ /[Tt]rue/ && $2 !~ /[Ff]alse/ {printf "%s: \"%s\"\n", $1, $2;next}{print}' \
+    | awk -F ":" '{printf "\"%s\":%s,\n", $1, $2}' \
+    | sed '$s/,$//'
+#     -e 's/\(.*\):\(.*\)/    "\1":\2,/'
+echo "}"
