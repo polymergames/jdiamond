@@ -64,7 +64,29 @@ const Diamond = ffi.Library(__dirname + '/src/CDiamond/lib/' + platformdir + '/l
     'dRenderComponent2DFlipX': ['void', ['int']],
     'dRenderComponent2DFlipY': ['void', ['int']],
     'dRenderComponent2DIsFlippedX': ['bool', ['int']],
-    'dRenderComponent2DIsFlippedY': ['bool', ['int']]
+    'dRenderComponent2DIsFlippedY': ['bool', ['int']],
+    // ParticleSystem2D
+    'dParticleSystem2DInit': ['bool', ['int']],
+    'dParticleSystem2DDestroy': ['void', []],
+    'dParticleSystem2DMakeEmitter': ['int', ['int', 'int']],
+    'dParticleSystem2DDestroyEmitter': ['void', ['int']],
+    'dParticleSystem2DUpdate': ['void', ['float']],
+    // Config
+    'dConfigInitConfigLoader': ['void', ['string']],
+    'dConfigDestroyAll': ['void', []],
+    'dConfigMakeConfigTable': ['int', []],
+    'dConfigLoadConfigTable': ['int', ['string']],
+    'dConfigDestroyConfigTable': ['void', ['int']],
+    'dConfigWriteConfig': ['void', ['int', 'string']],
+    'dConfigHasKey': ['bool', ['int', 'string']],
+    'dConfigGet': ['string', ['int', 'string']],
+    'dConfigGetInt': ['int', ['int', 'string']],
+    'dConfigGetFloat': ['float', ['int', 'string']],
+    'dConfigGetBool': ['bool', ['int', 'string']],
+    'dConfigSet': ['void', ['int', 'string', 'string']],
+    'dConfigSetInt': ['void', ['int', 'string', 'int']],
+    'dConfigSetFloat': ['void', ['int', 'string', 'float']],
+    'dConfigSetBool': ['void', ['int', 'string', 'bool']]
 });
 
 
@@ -82,6 +104,9 @@ exports.Config = function() {
     this.numAudioChannels = 2;
     this.audioFrequency = 44100; // hertz
     this.audioSampleSize = 2048; // bytes
+    // estimate for the max number of particles
+    // that may be present at any time.
+    this.particlePoolSize = 100;
 }
 
 /**
@@ -107,9 +132,12 @@ exports.init = function(config, callback) {
 
     if (!(Diamond.dEngine2DInit() &&
           Diamond.dTransform2Init() &&
-          Diamond.dRenderer2DInit())) {
+          Diamond.dRenderer2DInit() &&
+          Diamond.dParticleSystem2DInit(config.particlePoolSize))) {
         success = false;
     }
+
+    Diamond.dConfigInitConfigLoader("");
 
     if (callback)
         callback(success);
@@ -119,13 +147,20 @@ exports.init = function(config, callback) {
  * Begins the game loop in the Diamond backend.
  */
 exports.launch = function(update, postPhysicsUpdate, quit) {
-    var updateCB = ref.NULL;
     var postPhysicsUpdateCB = ref.NULL;
     var quitCB = ref.NULL;
 
-    if (update) {
-        updateCB = ffi.Callback('void', ['int'], update);
-    }
+    const updateCB = ffi.Callback('void', ['int'], function(delta) {
+        if (update) {
+            update(delta);
+        }
+
+        // update Diamond's non-core systems (ex. particles)
+        // that aren't automatically updated within
+        // Diamond Engine's game loop.
+        Diamond.dParticleSystem2DUpdate(delta);
+    });
+
     if (postPhysicsUpdate) {
         postPhysicsUpdateCB = ffi.Callback('void', ['int'], postPhysicsUpdate);
     }
@@ -142,6 +177,8 @@ exports.launch = function(update, postPhysicsUpdate, quit) {
  */
 exports.cleanUp = function() {
     Diamond.dGame2DDestroy();
+    Diamond.dConfigDestroyAll();
+    Diamond.dParticleSystem2DDestroy();
     Diamond.dRenderer2DDestroy();
     Diamond.dTransform2Destroy();
     Diamond.dEngine2DDestroy();
@@ -279,6 +316,26 @@ exports.renderer = {
 
     destroyTexture: function(texture) {
         Diamond.dRenderer2DDestroyTexture(texture.handle);
+    }
+}
+
+exports.ParticleEmitter2D = class ParticleEmitter2D {
+    constructor(config, transform) {
+        const configTable = Diamond.dConfigMakeConfigTable();
+
+        // key to success!
+        for (var key in config) {
+            Diamond.dConfigSet(configTable, key, config[key].toString());
+        }
+
+        this.handle = Diamond.dParticleSystem2DMakeEmitter(
+            configTable, transform.handle
+        );
+
+        Diamond.dConfigDestroyConfigTable(configTable);
+    }
+    destroy() {
+        Diamond.dParticleSystem2DDestroyEmitter(this.handle);
     }
 }
 

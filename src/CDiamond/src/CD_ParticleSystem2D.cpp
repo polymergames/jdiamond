@@ -47,12 +47,12 @@ void dParticleSystem2DDestroy() {
 tCD_Handle dParticleSystem2DMakeEmitter(tCD_Handle config, tCD_Handle transform) {
     return particleEmitters.insert(particleManager->makeEmitter(
         ParticleSystem2DConfig(dConfigGetConfigTable(config),
-                               dGetTextureFactory()),
+                               *dGetTextureFactory()),
         dTransform2GetTransformPtr(transform),
-        [engine](Particle2D &particle, const ParticleSystem2DConfig &config) {
+        [](Particle2D &particle, const ParticleSystem2DConfig &config) {
             particle.transform = engine->makeTransform();
             particle.renderComponent = renderer->makeRenderComponent(
-                particle.transform, config.particleTexture, config.layer;
+                particle.transform, config.particleTexture, config.layer
             );
         }
     ));

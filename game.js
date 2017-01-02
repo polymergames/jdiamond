@@ -24,6 +24,7 @@ var success = false;
 Diamond.init(config, res => success = res);
 
 if (success) {
+    // laser ship
     const shipSprite = Diamond.renderer.loadTexture("laserShip.png");
 
     const laserShip = new function() {
@@ -34,6 +35,34 @@ if (success) {
 
     var movespeed = 0.01;
     var turnspeed = 0.2;
+
+    // particle system
+    const particleConfig = {
+        particleTexture: "monomer.png",
+        minParticlesPerEmission: 1,
+        maxParticlesPerEmission: 10,
+        minEmitInterval: 10,
+        maxEmitInterval: 20,
+        minParticleLifeTime: 1000,
+        maxParticleLifeTime: 1000,
+        minEmitPointX: -100,
+        minEmitPointY: -100,
+        maxEmitPointX: 100,
+        maxEmitPointY: 100,
+        minEmitAngleDeg: -135,
+        maxEmitAngleDeg: -45,
+        animateScale: 1,
+        minBirthScale: 0.07,
+        maxBirthScale: 0.15,
+        minDeathScale: 0,
+        maxDeathScale: 0,
+        minParticleSpeed: 1,
+        maxParticleSpeed: 1
+    };
+
+    const particles = new Diamond.ParticleEmitter2D(
+        particleConfig, new Diamond.Transform2({x: 600, y: 350})
+    );
 
     const update = function(delta) {
         // laserShip.renderer.flipX();
