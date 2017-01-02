@@ -29,6 +29,9 @@ static Renderer2D* renderer = nullptr;
 static ParticleManager2D* particleManager = nullptr;
 static SwapVector<ParticleEmitter2D> particleEmitters;
 
+// DEBUG
+// static int numSpawned = 0;
+
 bool dParticleSystem2DInit(int poolsize) {
     engine = dEngine2DGetEngine();
     if (engine) renderer = engine->getRenderer();
@@ -45,11 +48,22 @@ void dParticleSystem2DDestroy() {
 }
 
 tCD_Handle dParticleSystem2DMakeEmitter(tCD_Handle config, tCD_Handle transform) {
+    // DEBUG
+    // auto configtable = dConfigGetConfigTable(config);
+    // for (auto pair = configtable.data().begin();
+    //      pair != configtable.data().end();
+    //      ++pair) {
+    //     std::cout << pair->first << ": " << pair->second << std::endl;
+    // }
+
+    auto particleConfig = ParticleSystem2DConfig(dConfigGetConfigTable(config),
+                                                 *dGetTextureFactory());
+
     return particleEmitters.insert(particleManager->makeEmitter(
-        ParticleSystem2DConfig(dConfigGetConfigTable(config),
-                               *dGetTextureFactory()),
+        particleConfig,
         dTransform2GetTransformPtr(transform),
         [](Particle2D &particle, const ParticleSystem2DConfig &config) {
+            // numSpawned += 1; // DEBUG
             particle.transform = engine->makeTransform();
             particle.renderComponent = renderer->makeRenderComponent(
                 particle.transform, config.particleTexture, config.layer
@@ -63,8 +77,16 @@ void dParticleSystem2DDestroyEmitter(tCD_Handle emitter) {
 }
 
 void dParticleSystem2DUpdate(tD_delta delta) {
-    particleManager->update(delta);
-    for (auto emitter : particleEmitters) {
-        emitter.update(delta);
+    for (auto i = particleEmitters.begin(); i != particleEmitters.end(); ++i) {
+        // DEBUG
+        // std::cout << "time elapsed: " << i->mTimeElapsed << std::endl;
+        i->update(delta);
+        // std::cout << "delta: " << delta << "; ";
+        // std::cout << "time elapsed: " << i->mTimeElapsed << "; ";
+        // std::cout << "last spawn time: " << i->mLastParticleSpawnTime << "; ";
+        // std::cout << "current emit interval: " << i->mEmitInterval << "; ";
     }
+    particleManager->update(delta);
+    // std::cout << "numSpawned: " << numSpawned << std::endl;
+    // numSpawned = 0;
 }

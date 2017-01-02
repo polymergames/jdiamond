@@ -70,7 +70,7 @@ const Diamond = ffi.Library(__dirname + '/src/CDiamond/lib/' + platformdir + '/l
     'dParticleSystem2DDestroy': ['void', []],
     'dParticleSystem2DMakeEmitter': ['int', ['int', 'int']],
     'dParticleSystem2DDestroyEmitter': ['void', ['int']],
-    'dParticleSystem2DUpdate': ['void', ['float']],
+    'dParticleSystem2DUpdate': ['void', ['int']],
     // Config
     'dConfigInitConfigLoader': ['void', ['string']],
     'dConfigDestroyAll': ['void', []],
@@ -112,7 +112,7 @@ exports.Config = function() {
 /**
  * Initializes Diamond engine and its subsystems.
  */
-exports.init = function(config, callback) {
+exports.init = function(config) {
     var success = true;
 
     if (config) {
@@ -139,8 +139,7 @@ exports.init = function(config, callback) {
 
     Diamond.dConfigInitConfigLoader("");
 
-    if (callback)
-        callback(success);
+    return success;
 }
 
 /**
@@ -321,6 +320,8 @@ exports.renderer = {
 
 exports.ParticleEmitter2D = class ParticleEmitter2D {
     constructor(config, transform) {
+        this.transform = transform;
+
         const configTable = Diamond.dConfigMakeConfigTable();
 
         // key to success!
@@ -334,6 +335,8 @@ exports.ParticleEmitter2D = class ParticleEmitter2D {
 
         Diamond.dConfigDestroyConfigTable(configTable);
     }
+    // note: this does not destroy the particle emitter's
+    // associated transform!
     destroy() {
         Diamond.dParticleSystem2DDestroyEmitter(this.handle);
     }

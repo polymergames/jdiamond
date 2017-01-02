@@ -15,65 +15,46 @@
 */
 
 const Diamond = require('./jdiamond');
+const fs = require('fs');
 
 const config = new Diamond.Config();
 config.windowTitle = "Best game";
-config.vsync = true;
+config.windowWidth = 1920;
+config.windowHeight = 1080;
+// config.fullscreen = true;
+config.vsync = false;
 
-var success = false;
-Diamond.init(config, res => success = res);
-
-if (success) {
+if (Diamond.init(config)) {
     // laser ship
-    const shipSprite = Diamond.renderer.loadTexture("laserShip.png");
-
-    const laserShip = new function() {
-        this.transform = new Diamond.Transform2({x: 600, y: 100});
-        this.renderer = new Diamond.RenderComponent2D(this.transform, shipSprite);
-    };
-    laserShip.renderer.pivot = {x: 75, y: 105};
-
-    var movespeed = 0.01;
-    var turnspeed = 0.2;
+    // const shipSprite = Diamond.renderer.loadTexture("laserShip.png");
+    //
+    // const laserShip = new function() {
+    //     this.transform = new Diamond.Transform2({x: 900, y: 300});
+    //     this.renderer = new Diamond.RenderComponent2D(this.transform, shipSprite, 1);
+    // };
+    // laserShip.renderer.pivot = {x: 40, y: 95};
+    //
+    // var movespeed = 0.01;
+    // var turnspeed = 0.2;
 
     // particle system
-    const particleConfig = {
-        particleTexture: "monomer.png",
-        minParticlesPerEmission: 1,
-        maxParticlesPerEmission: 10,
-        minEmitInterval: 10,
-        maxEmitInterval: 20,
-        minParticleLifeTime: 1000,
-        maxParticleLifeTime: 1000,
-        minEmitPointX: -100,
-        minEmitPointY: -100,
-        maxEmitPointX: 100,
-        maxEmitPointY: 100,
-        minEmitAngleDeg: -135,
-        maxEmitAngleDeg: -45,
-        animateScale: 1,
-        minBirthScale: 0.07,
-        maxBirthScale: 0.15,
-        minDeathScale: 0,
-        maxDeathScale: 0,
-        minParticleSpeed: 1,
-        maxParticleSpeed: 1
-    };
+    const particleConfig = JSON.parse(fs.readFileSync("bigfountain.json"));
 
     const particles = new Diamond.ParticleEmitter2D(
-        particleConfig, new Diamond.Transform2({x: 600, y: 350})
+        particleConfig, new Diamond.Transform2({x: 960, y: 540})
     );
 
     const update = function(delta) {
         // laserShip.renderer.flipX();
         // laserShip.renderer.flipY();
-        laserShip.transform.position.add(
-            Diamond.Math.rotateVector(
-                {x: delta, y: 0},
-                laserShip.transform.rotation * Diamond.Math.DEG2RAD
-            )
-        );
-        laserShip.transform.rotation += delta * turnspeed;
+        // console.log(delta)
+        // laserShip.transform.position.add(
+        //     Diamond.Math.rotateVector(
+        //         {x: delta, y: 0},
+        //         laserShip.transform.rotation * Diamond.Math.DEG2RAD
+        //     )
+        // );
+        // laserShip.transform.rotation += delta * turnspeed;
     }
 
     Diamond.launch(update);
