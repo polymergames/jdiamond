@@ -17,11 +17,9 @@
 const ffi = require('ffi');
 const ref = require('ref');
 
-const platformdir = process.platform;
-
-const intPtr = ref.refType('int');
-
 // This is the bridge to native Diamond functions.
+const platformdir = process.platform;
+const intPtr = ref.refType('int');
 const Diamond = ffi.Library(__dirname + '/src/CDiamond/lib/' + platformdir + '/libCDiamond', {
     // Engine2D
     'dEngine2DConfigureGraphics': ['void', ['string', 'int', 'int', 'bool', 'bool']],
@@ -122,22 +120,25 @@ exports.Config = function() {
 exports.init = function(config) {
     var success = true;
 
-    if (config) {
-        Diamond.dEngine2DConfigureGraphics(
-            config.windowTitle,
-            config.windowWidth,
-            config.windowHeight,
-            config.fullscreen,
-            config.vsync
-        );
-        Diamond.dEngine2DConfigureAudio(
-            config.numAudioChannels,
-            config.audioFrequency,
-            config.audioSampleSize
-        );
-        if (config.benchmark)
-            Diamond.dGame2DBenchmark(config.benchmarkFile);
+    if (!config) {
+        config = new exports.Config();
     }
+
+    Diamond.dEngine2DConfigureGraphics(
+        config.windowTitle,
+        config.windowWidth,
+        config.windowHeight,
+        config.fullscreen,
+        config.vsync
+    );
+    Diamond.dEngine2DConfigureAudio(
+        config.numAudioChannels,
+        config.audioFrequency,
+        config.audioSampleSize
+    );
+
+    if (config.benchmark)
+        Diamond.dGame2DBenchmark(config.benchmarkFile);
 
     if (!(Diamond.dEngine2DInit() &&
           Diamond.dTransform2Init() &&

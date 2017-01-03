@@ -1,0 +1,9 @@
+#!/bin/bash
+
+platform=$(uname)
+
+if [[ "$platform" == "Darwin" || "$TRAVIS_OS_NAME" == "osx" ]]; then
+    echo "Installing SDL frameworks"
+    cp -r -n src/CDiamond/extern/SDL/*.framework /Library/Frameworks
+fi
+#TODO: install dependencies for windows and linux!
