@@ -37,7 +37,7 @@ if(APPLE)
 	find_library(SDL_2 SDL2)
 	find_library(SDL_2_IMAGE SDL2_image)
 	find_library(SDL_2_MIXER SDL2_mixer)
-	set(LINK_LIBS libDiamond.a libQuantum2D.a ${SDL_2} ${SDL_2_IMAGE} ${SDL_2_MIXER})
+	set(LINK_LIBS libDiamond.a libQuantum2D.a ${SDL_2} ${SDL_2_IMAGE} ${SDL_2_MIXER} -stdlib=libc++)
 else()
 	# TODO: windows and linux sdl libs
 	set(LINK_LIBS libDiamond.a)
