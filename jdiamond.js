@@ -17,7 +17,9 @@
 const ffi = require('ffi');
 const ref = require('ref');
 
-const platformdir = process.platform
+const platformdir = process.platform;
+
+const intPtr = ref.refType('int');
 
 // This is the bridge to native Diamond functions.
 const Diamond = ffi.Library(__dirname + '/src/CDiamond/lib/' + platformdir + '/libCDiamond', {
@@ -52,6 +54,8 @@ const Diamond = ffi.Library(__dirname + '/src/CDiamond/lib/' + platformdir + '/l
     // Renderer2D
     'dRenderer2DInit': ['bool', []],
     'dRenderer2DDestroy': ['void', []],
+    'dRenderer2DGetResolution': ['void', [intPtr, intPtr]],
+    'dRenderer2DGetScreenResolution': ['void', [intPtr, intPtr]],
     'dRenderer2DLoadTexture': ['int', ['string']],
     'dRenderer2DDestroyTexture': ['void', ['int']],
     'dRenderer2DMakeRenderComponent': ['int', ['int', 'int', 'int']],
@@ -317,9 +321,31 @@ exports.renderer = {
             return null;
         return {handle: handle}
     },
-
     destroyTexture: function(texture) {
         Diamond.dRenderer2DDestroyTexture(texture.handle);
+    },
+
+    get resolution() {
+        var xbuf = ref.alloc('int');
+        var ybuf = ref.alloc('int');
+
+        Diamond.dRenderer2DGetResolution(xbuf, ybuf);
+
+        return {
+            x: xbuf.deref(),
+            y: ybuf.deref()
+        };
+    },
+    get screenResolution() {
+        var xbuf = ref.alloc('int');
+        var ybuf = ref.alloc('int');
+
+        Diamond.dRenderer2DGetScreenResolution(xbuf, ybuf);
+
+        return {
+            x: xbuf.deref(),
+            y: ybuf.deref()
+        };
     }
 }
 
@@ -349,7 +375,22 @@ exports.ParticleEmitter2D = class ParticleEmitter2D {
 
 exports.Math = {
     RAD2DEG: 180 / Math.PI,
-    DEG2RAD: Math.PI / 180,
+    DEG2RAD: Math.PI / 180
+}
+
+exports.Vector2 = {
+    scalar: function(vec, scalar) {
+        return {
+            x: vec.x * scalar,
+            y: vec.y * scalar
+        };
+    },
+    scalarVec: function(vec, scalar) {
+        return {
+            x: vec.x * scalar.x,
+            y: vec.y * scalar.y
+        }
+    },
     rotateVector: function(vec, radians) {
         const sinrad = Math.sin(radians);
         const cosrad = Math.cos(radians);

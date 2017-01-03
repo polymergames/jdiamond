@@ -35,7 +35,8 @@ public:
         : Game2D(engine),
           updateFunc(updateFunc),
           postPhysicsUpdateFunc(postPhysicsUpdateFunc),
-          quitFunc(quitFunc) {
+          quitFunc(quitFunc),
+          benchmarkLogger(nullptr) {
 
         if (initFunc) initFunc();
 
@@ -55,6 +56,7 @@ public:
     }
 
     void update(tD_delta delta) override {
+
         if (updateFunc) updateFunc(delta);
         if (benchmarkLogger) benchmarkLogger->update(delta);
     }

@@ -35,6 +35,9 @@ bool dRenderer2DInit();
 
 void dRenderer2DDestroy();
 
+void dRenderer2DGetResolution(int* x, int* y);
+void dRenderer2DGetScreenResolution(int* x, int* y);
+
 /**
  * Returns CD_INVALID_HANDLE if texture failed to load.
  */

@@ -41,6 +41,18 @@ void dRenderer2DDestroy() {
     renderer = nullptr;
 }
 
+void dRenderer2DGetResolution(int* x, int* y) {
+    auto res = renderer->getResolution();
+    *x = res.x;
+    *y = res.y;
+}
+
+void dRenderer2DGetScreenResolution(int* x, int* y) {
+    auto res = renderer->getScreenResolution();
+    *x = res.x;
+    *y = res.y;
+}
+
 tCD_Handle dRenderer2DLoadTexture(char* path) {
     auto texture = textureFactory->loadTexture(path);
     if (!texture) return CD_INVALID_HANDLE;
