@@ -24,6 +24,10 @@ const intPtr = ref.refType('int');
 const platformdir = process.platform;
 var libpath = __dirname + '/src/CDiamond/lib/' + platformdir;
 if (platformdir == 'win32') {
+    if (process.arch == 'ia32')
+        libpath += '/x86';
+    else
+        libpath += '/x64';
     libpath += '/CDiamond';
 }
 else {
