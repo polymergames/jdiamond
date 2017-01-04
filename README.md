@@ -2,7 +2,7 @@ jdiamond
 ========
 [![Build Status](https://travis-ci.org/polymergames/jdiamond.svg?branch=master)](https://travis-ci.org/polymergames/jdiamond)
 
-`jdiamond` is a JavaScript game engine for desktop games. It is a node.js interface for [Diamond Engine](https://github.com/polymergames/Diamond), a 2D C++ game engine. It allows you to develop high-performance PC games that are rendered on native graphics libraries such as OpenGL. And unlike some desktop game engines that feature "JavaScript" scripting, it runs in a real node.js environment, allowing you to take full advantage of JavaScript features and the massive variety of node.js libraries.
+`jdiamond` is a JavaScript game engine for desktop games. It is a node.js interface for [Diamond](https://github.com/polymergames/Diamond), a 2D C++ game engine. It allows you to develop high-performance PC games that are rendered on native graphics libraries such as OpenGL. And unlike some desktop game engines that feature "JavaScript" scripting, it runs in a real node.js environment, allowing you to take full advantage of JavaScript features and the massive variety of node.js libraries.
 
 API
 ---
@@ -47,5 +47,9 @@ Coming soon! Once we have everything ready, you can expect installation to be a 
 
 License
 -------
+
+jdiamond uses node-ffi to communicate with the C++ Diamond library. See [node-ffi](https://github.com/node-ffi/node-ffi) for license details.
+
+Diamond uses Simple DirectMedia Layer (SDL), which is Copyright (c) 1997-2014 Sam Lantinga <slouken@libsdl.org>.
 
 jdiamond is Copyright 2016 Ahnaf Siddiqui, and is licensed under the Apache License, Version 2.0 (see LICENSE file).
