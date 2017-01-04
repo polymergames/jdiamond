@@ -43,8 +43,11 @@ else()
 	# Windows
 	# TODO: linux!
 	set(LINK_LIBS Diamond.lib Quantum2D.lib SDL2.lib SDL2_image.lib SDL2_mixer.lib)
-	# TODO: use x64 libs on x64 machine
-	link_directories(extern/Diamond/lib/x86 extern/Quantum2D/lib/x86 extern/SDL2/lib/x86)
+	if(CMAKE_VS_PLATFORM_NAME STREQUAL x64)
+		link_directories(extern/Diamond/lib/x64 extern/Quantum2D/lib/x64 extern/SDL2/lib/x64)
+	else()
+		link_directories(extern/Diamond/lib/x86 extern/Quantum2D/lib/x86 extern/SDL2/lib/x86)
+	endif()
 endif()
 
 # Get source files
