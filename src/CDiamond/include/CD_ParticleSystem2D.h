@@ -26,15 +26,15 @@ extern "C" {
 /**
  * Call this before using any other particle system functions.
  */
-bool dParticleSystem2DInit(int poolsize);
+CDEXPORT bool dParticleSystem2DInit(int poolsize);
 
-void dParticleSystem2DDestroy();
+CDEXPORT void dParticleSystem2DDestroy();
 
-tCD_Handle dParticleSystem2DMakeEmitter(tCD_Handle config, tCD_Handle transform);
+CDEXPORT tCD_Handle dParticleSystem2DMakeEmitter(tCD_Handle config, tCD_Handle transform);
 
-void dParticleSystem2DDestroyEmitter(tCD_Handle emitter);
+CDEXPORT void dParticleSystem2DDestroyEmitter(tCD_Handle emitter);
 
-void dParticleSystem2DUpdate(tD_delta delta);
+CDEXPORT void dParticleSystem2DUpdate(tD_delta delta);
 
 #ifdef __cplusplus
 }

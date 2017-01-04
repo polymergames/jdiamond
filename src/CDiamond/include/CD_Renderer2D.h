@@ -31,48 +31,48 @@ extern "C" {
  * Call this before using any other renderer functions.
  * Requires that dEngine2DInit was called first.
  */
-bool dRenderer2DInit();
+CDEXPORT bool dRenderer2DInit();
 
-void dRenderer2DDestroy();
+CDEXPORT void dRenderer2DDestroy();
 
-void dRenderer2DGetResolution(int* x, int* y);
-void dRenderer2DGetScreenResolution(int* x, int* y);
+CDEXPORT void dRenderer2DGetResolution(int* x, int* y);
+CDEXPORT void dRenderer2DGetScreenResolution(int* x, int* y);
 
 /**
  * Returns CD_INVALID_HANDLE if texture failed to load.
  */
-tCD_Handle dRenderer2DLoadTexture(char* path);
+CDEXPORT tCD_Handle dRenderer2DLoadTexture(char* path);
 
-void dRenderer2DDestroyTexture(tCD_Handle texture);
+CDEXPORT void dRenderer2DDestroyTexture(tCD_Handle texture);
 
-tCD_Handle dRenderer2DMakeRenderComponent(tCD_Handle transform,
+CDEXPORT tCD_Handle dRenderer2DMakeRenderComponent(tCD_Handle transform,
                                           tCD_Handle texture,
                                           tCD_RenderLayer layer);
 
-void dRenderer2DDestroyRenderComponent(tCD_Handle renderComponent);
+CDEXPORT void dRenderer2DDestroyRenderComponent(tCD_Handle renderComponent);
 
-void dRenderComponent2DSetSprite(tCD_Handle renderComponent,
+CDEXPORT void dRenderComponent2DSetSprite(tCD_Handle renderComponent,
                                  tCD_Handle texture);
 
-tCD_RenderLayer dRenderComponent2DGetLayer(tCD_Handle renderComponent);
-void dRenderComponent2DSetLayer(tCD_Handle renderComponent,
+CDEXPORT tCD_RenderLayer dRenderComponent2DGetLayer(tCD_Handle renderComponent);
+CDEXPORT void dRenderComponent2DSetLayer(tCD_Handle renderComponent,
                                 tCD_RenderLayer newLayer);
 
-dVector2f dRenderComponent2DGetPivot(tCD_Handle renderComponent);
+CDEXPORT dVector2f dRenderComponent2DGetPivot(tCD_Handle renderComponent);
 
-float dRenderComponent2DGetPivotX(tCD_Handle renderComponent);
-float dRenderComponent2DGetPivotY(tCD_Handle renderComponent);
+CDEXPORT float dRenderComponent2DGetPivotX(tCD_Handle renderComponent);
+CDEXPORT float dRenderComponent2DGetPivotY(tCD_Handle renderComponent);
 
-void dRenderComponent2DVSetPivot(tCD_Handle renderComponent,
+CDEXPORT void dRenderComponent2DVSetPivot(tCD_Handle renderComponent,
                                  dVector2f newPivot);
-void dRenderComponent2DSetPivot(tCD_Handle renderComponent,
+CDEXPORT void dRenderComponent2DSetPivot(tCD_Handle renderComponent,
                                 float newPivotX, float newPivotY);
 
-void dRenderComponent2DFlipX(tCD_Handle renderComponent);
-void dRenderComponent2DFlipY(tCD_Handle renderComponent);
+CDEXPORT void dRenderComponent2DFlipX(tCD_Handle renderComponent);
+CDEXPORT void dRenderComponent2DFlipY(tCD_Handle renderComponent);
 
-bool dRenderComponent2DIsFlippedX(tCD_Handle renderComponent);
-bool dRenderComponent2DIsFlippedY(tCD_Handle renderComponent);
+CDEXPORT bool dRenderComponent2DIsFlippedX(tCD_Handle renderComponent);
+CDEXPORT bool dRenderComponent2DIsFlippedY(tCD_Handle renderComponent);
 
 
 #ifdef __cplusplus

@@ -19,6 +19,10 @@
 
 #include "D_typedefs.h"
 
+#if defined _WIN32 || defined _WIN64
+#define CDEXPORT __declspec(dllexport)
+#endif
+
 typedef int tCD_Handle;
 #define CD_INVALID_HANDLE -1;
 

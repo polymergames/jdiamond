@@ -27,54 +27,54 @@ extern "C" {
  * Call this before using any other transform functions.
  * Requires that dEngine2DInit was called first.
  */
-bool dTransform2Init();
+CDEXPORT bool dTransform2Init();
 
-void dTransform2Destroy();
+CDEXPORT void dTransform2Destroy();
 
-tCD_Handle dTransform2VMakeTransform(dVector2f position,
-                                     float rotation,
-                                     dVector2f scale);
+CDEXPORT tCD_Handle dTransform2VMakeTransform(dVector2f position,
+                                              float rotation,
+                                              dVector2f scale);
 
-tCD_Handle dTransform2MakeTransform(float positionX, float positionY,
-                                    float rotation,
-                                    float scaleX, float scaleY);
+CDEXPORT tCD_Handle dTransform2MakeTransform(float positionX, float positionY,
+                                             float rotation,
+                                             float scaleX, float scaleY);
 
-void dTransform2DestroyTransform(tCD_Handle transform);
+CDEXPORT void dTransform2DestroyTransform(tCD_Handle transform);
 
-dTransform2f dTransform2GetTransform(tCD_Handle transform);
+CDEXPORT dTransform2f dTransform2GetTransform(tCD_Handle transform);
 
-void dTransform2VSetTransform(tCD_Handle transform,
-                              dVector2f position,
-                              float rotation,
-                              dVector2f scale);
-void dTransform2SetTransform(tCD_Handle transform,
-                             float positionX, float positionY,
-                             float rotation,
-                             float scaleX, float scaleY);
+CDEXPORT void dTransform2VSetTransform(tCD_Handle transform,
+                                       dVector2f position,
+                                       float rotation,
+                                       dVector2f scale);
+CDEXPORT void dTransform2SetTransform(tCD_Handle transform,
+                                      float positionX, float positionY,
+                                      float rotation,
+                                      float scaleX, float scaleY);
 
-void dTransform2VSetPosition(tCD_Handle transform, dVector2f position);
-void dTransform2SetPosition(tCD_Handle transform,
-                            float positionX, float positionY);
+CDEXPORT void dTransform2VSetPosition(tCD_Handle transform, dVector2f position);
+CDEXPORT void dTransform2SetPosition(tCD_Handle transform,
+                                     float positionX, float positionY);
 
-float dTransform2GetPositionX(tCD_Handle transform);
-float dTransform2GetPositionY(tCD_Handle transform);
+CDEXPORT float dTransform2GetPositionX(tCD_Handle transform);
+CDEXPORT float dTransform2GetPositionY(tCD_Handle transform);
 
-void dTransform2VAddPosition(tCD_Handle transform, dVector2f dpos);
-void dTransform2AddPosition(tCD_Handle transform, float dx, float dy);
+CDEXPORT void dTransform2VAddPosition(tCD_Handle transform, dVector2f dpos);
+CDEXPORT void dTransform2AddPosition(tCD_Handle transform, float dx, float dy);
 
-void dTransform2AddPositionX(tCD_Handle transform, float dx);
-void dTransform2AddPositionY(tCD_Handle transform, float dy);
+CDEXPORT void dTransform2AddPositionX(tCD_Handle transform, float dx);
+CDEXPORT void dTransform2AddPositionY(tCD_Handle transform, float dy);
 
-float dTransform2GetRotation(tCD_Handle transform);
-void dTransform2SetRotation(tCD_Handle transform, float rotation);
-void dTransform2AddRotation(tCD_Handle transform, float drotation);
+CDEXPORT float dTransform2GetRotation(tCD_Handle transform);
+CDEXPORT void dTransform2SetRotation(tCD_Handle transform, float rotation);
+CDEXPORT void dTransform2AddRotation(tCD_Handle transform, float drotation);
 
-void dTransform2VSetScale(tCD_Handle transform, dVector2f scale);
-void dTransform2SetScale(tCD_Handle transform,
-                         float scaleX, float scaleY);
+CDEXPORT void dTransform2VSetScale(tCD_Handle transform, dVector2f scale);
+CDEXPORT void dTransform2SetScale(tCD_Handle transform,
+                                  float scaleX, float scaleY);
 
-float dTransform2GetScaleX(tCD_Handle transform);
-float dTransform2GetScaleY(tCD_Handle transform);
+CDEXPORT float dTransform2GetScaleX(tCD_Handle transform);
+CDEXPORT float dTransform2GetScaleY(tCD_Handle transform);
 
 #ifdef __cplusplus
 }

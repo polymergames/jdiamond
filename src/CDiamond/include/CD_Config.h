@@ -28,27 +28,27 @@ extern "C" {
  * Must call this before loading or writing config files
  * (using dConfigLoadConfigTable or dConfigWriteConfig).
  */
-void dConfigInitConfigLoader(char* pathRoot);
+CDEXPORT void dConfigInitConfigLoader(char* pathRoot);
 
-void dConfigDestroyAll();
+CDEXPORT void dConfigDestroyAll();
 
-tCD_Handle dConfigMakeConfigTable();
-tCD_Handle dConfigLoadConfigTable(char* path);
-void dConfigDestroyConfigTable(tCD_Handle configtable);
+CDEXPORT tCD_Handle dConfigMakeConfigTable();
+CDEXPORT tCD_Handle dConfigLoadConfigTable(char* path);
+CDEXPORT void dConfigDestroyConfigTable(tCD_Handle configtable);
 
-void dConfigWriteConfig(tCD_Handle configtable, char* path);
+CDEXPORT void dConfigWriteConfig(tCD_Handle configtable, char* path);
 
-bool dConfigHasKey(tCD_Handle configtable, char* key);
+CDEXPORT bool dConfigHasKey(tCD_Handle configtable, char* key);
 
-const char* dConfigGet      (tCD_Handle configtable, char* key);
-int         dConfigGetInt   (tCD_Handle configtable, char* key);
-float       dConfigGetFloat (tCD_Handle configtable, char* key);
-bool        dConfigGetBool  (tCD_Handle configtable, char* key);
+CDEXPORT const char* dConfigGet      (tCD_Handle configtable, char* key);
+CDEXPORT int         dConfigGetInt   (tCD_Handle configtable, char* key);
+CDEXPORT float       dConfigGetFloat (tCD_Handle configtable, char* key);
+CDEXPORT bool        dConfigGetBool  (tCD_Handle configtable, char* key);
 
-void dConfigSet      (tCD_Handle configtable, char* key, char* value);
-void dConfigSetInt   (tCD_Handle configtable, char* key, int value);
-void dConfigSetFloat (tCD_Handle configtable, char* key, float value);
-void dConfigSetBool  (tCD_Handle configtable, char* key, bool value);
+CDEXPORT void dConfigSet      (tCD_Handle configtable, char* key, char* value);
+CDEXPORT void dConfigSetInt   (tCD_Handle configtable, char* key, int value);
+CDEXPORT void dConfigSetFloat (tCD_Handle configtable, char* key, float value);
+CDEXPORT void dConfigSetBool  (tCD_Handle configtable, char* key, bool value);
 
 #ifdef __cplusplus
 }

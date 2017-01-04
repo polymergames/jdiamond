@@ -18,25 +18,26 @@
 #define D_CD_ENGINE2D_H
 
 #include "D_Engine2D.h"
+#include "CD_typedefs.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void dEngine2DConfigureGraphics(char* windowTitle,
-                                int windowWidth,
-                                int windowHeight,
-                                bool fullscreen,
-                                bool vsync);
+CDEXPORT void dEngine2DConfigureGraphics(char* windowTitle,
+                                         int windowWidth,
+                                         int windowHeight,
+                                         bool fullscreen,
+                                         bool vsync);
 
 /**
  * numChannels should be 1 or 2, for mono or stereo, respectively.
  * frequency is in hertz.
  * sampleSize is in bytes.
  */
-void dEngine2DConfigureAudio(int numChannels,
-                             int frequency,
-                             int sampleSize);
+CDEXPORT void dEngine2DConfigureAudio(int numChannels,
+                                      int frequency,
+                                      int sampleSize);
 
 /**
  * Initializes the game engine and all subsystems.
@@ -46,18 +47,18 @@ void dEngine2DConfigureAudio(int numChannels,
  * or any subsystems (ex. dRenderer2D init and functions).
  * Returns true if initialization was successful.
  */
-bool dEngine2DInit();
+CDEXPORT bool dEngine2DInit();
 
 /**
  * Frees all engine resources.
  */
-void dEngine2DDestroy();
+CDEXPORT void dEngine2DDestroy();
 
 /**
  * Launches the game in CD_Game2D and begins the game loop.
  * Requires that dGame2DInit was called first.
  */
-void dEngine2DLaunchGame();
+CDEXPORT void dEngine2DLaunchGame();
 
 #ifdef __cplusplus
 }

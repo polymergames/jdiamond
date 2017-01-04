@@ -18,6 +18,7 @@
 #define D_CD_GAME2D_H
 
 #include "D_Game2D.h"
+#include "CD_typedefs.h"
 
 typedef void (*dGame2DVoidFunc)(void);
 typedef void (*dGame2DUpdateFunc)(tD_delta);
@@ -30,7 +31,7 @@ extern "C" {
  * Turns on game benchmarking and sets the file to output results.
  * This should be called before dGame2DInit.
  */
-void dGame2DBenchmark(char *filePath);
+CDEXPORT void dGame2DBenchmark(char *filePath);
 
 /**
  * Initializes the game. Should be called before calling dEngine2DLaunchGame.
@@ -38,16 +39,16 @@ void dGame2DBenchmark(char *filePath);
  * Any/all of the parameters are allowed to be NULL.
  * Returns true if initialization was successful.
  */
-bool dGame2DInit(dGame2DVoidFunc   initFunc,
-                 dGame2DUpdateFunc updateFunc,
-                 dGame2DUpdateFunc postPhysicsUpdateFunc,
-                 dGame2DVoidFunc   quitFunc);
+CDEXPORT bool dGame2DInit(dGame2DVoidFunc   initFunc,
+                          dGame2DUpdateFunc updateFunc,
+                          dGame2DUpdateFunc postPhysicsUpdateFunc,
+                          dGame2DVoidFunc   quitFunc);
 
 /**
  * Frees all game resources.
  * Should be called when the game ends along with dEngine2DDestroy.
  */
-void dGame2DDestroy();
+CDEXPORT void dGame2DDestroy();
 
 #ifdef __cplusplus
 }
