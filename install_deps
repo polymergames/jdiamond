@@ -1,9 +1,29 @@
 #!/bin/bash
 
+set -e
+
 platform=$(uname)
 
 if [[ "$platform" == "Darwin" || "$TRAVIS_OS_NAME" == "osx" ]]; then
-    echo "Installing SDL frameworks"
-    cp -r -n src/CDiamond/extern/SDL/*.framework /Library/Frameworks
+    echo "Installing SDL2"
+    wget --show-progress https://www.libsdl.org/release/SDL2-2.0.5.dmg
+    hdiutil attach SDL2-2.0.5.dmg
+    cp -r -n /Volumes/SDL2/*.framework /Library/Frameworks
+    hdiutil detach /Volumes/SDL2
+    rm SDL2-2.0.5.dmg
+
+    echo "Installing SDL image"
+    wget --show-progress https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.1.dmg
+    hdiutil attach SDL2_image-2.0.1.dmg
+    cp -r -n /Volumes/SDL2_image/*.framework /Library/Frameworks
+    hdiutil detach /Volumes/SDL2_image/
+    rm SDL2_image-2.0.1.dmg
+
+    echo "Installing SDL mixer"
+    wget --show-progress https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.1.dmg
+    hdiutil attach SDL2_mixer-2.0.1.dmg
+    cp -r -n /Volumes/SDL2_mixer/*.framework /Library/Frameworks
+    hdiutil detach /Volumes/SDL2_mixer/
+    rm SDL2_mixer-2.0.1.dmg
 fi
 #TODO: install dependencies for windows and linux!
