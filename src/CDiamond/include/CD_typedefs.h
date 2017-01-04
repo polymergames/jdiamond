@@ -19,6 +19,7 @@
 
 #include "D_typedefs.h"
 
+#define CDEXPORT
 #if defined _WIN32 || defined _WIN64
 #define CDEXPORT __declspec(dllexport)
 #endif
