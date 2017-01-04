@@ -69,15 +69,6 @@ $ ./node_modules/jdiamond/install_deps ~/Library/Frameworks
 
 As far as we know, SDL does not have an executable installer, and we haven't made one yet. This means that, for now, you'll have to manually install all of the DLLs in `jdiamond/src/CDiamond/extern/SDL2/lib/[your architecture]/`. You can copy those DLLs to your node.js directory (ex. `C:\Program Files\nodejs`) and jdiamond should be able to find them. Or, you could install them to `C:\Windows\System32`, but we haven't been able to do this successfully (if you're Windows-savvy, please consider contributing to the project!).
 
-#### Did it work??
-
-After you've installed SDL, you can run the following to make sure jdiamond is working:
-
-```
-$ cd node_modules/jdiamond
-$ npm test
-```
-
 License
 -------
 
