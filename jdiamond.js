@@ -17,11 +17,21 @@
 const ffi = require('ffi');
 const ref = require('ref');
 
-// This is the bridge to native Diamond functions.
-const platformdir = process.platform;
+// Define types for Diamond lib interface
 const intPtr = ref.refType('int');
-const Diamond = ffi.Library(__dirname + '/src/CDiamond/lib/' + platformdir + '/libCDiamond', {
-// const Diamond = ffi.Library(__dirname + '/src/CDiamond/lib/' + platformdir + '/CDiamond', {
+
+// Determine the path to the Diamond lib
+const platformdir = process.platform;
+var libpath = __dirname + '/src/CDiamond/lib/' + platformdir;
+if (platformdir == 'win32') {
+    libpath += '/CDiamond';
+}
+else {
+    libpath += '/libCDiamond';
+}
+
+// This is the bridge to native Diamond functions
+const Diamond = ffi.Library(libpath, {
     // Engine2D
     'dEngine2DConfigureGraphics': ['void', ['string', 'int', 'int', 'bool', 'bool']],
     'dEngine2DConfigureAudio': ['void', ['int', 'int', 'int']],
@@ -93,8 +103,7 @@ const Diamond = ffi.Library(__dirname + '/src/CDiamond/lib/' + platformdir + '/l
     'dConfigSetBool': ['void', ['int', 'string', 'bool']]
 });
 
-
-// API starts here
+// jdiamond API starts here
 
 /**
  * Configuration for Diamond engine with default values.
