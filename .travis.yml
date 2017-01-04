@@ -6,3 +6,6 @@ os:
     - osx
 before_install:
     - sudo ./install_deps
+notifications:
+    email:
+        - ahnaf@polymergames.com
