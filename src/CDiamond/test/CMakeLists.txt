@@ -15,7 +15,7 @@
 #
 
 cmake_minimum_required(VERSION 3.2.0)
-project(CDiamond)
+project(CDiamondTest)
 
 
 # Flags
@@ -24,11 +24,11 @@ set(CMAKE_CXX_FLAGS -std=c++11)
 
 # Header includes
 include_directories(
-	include
-	extern/Diamond/include/backend
-	extern/Diamond/include
-	extern/DiamondUtils/include
-	extern/Quantum2D/include
+	../include
+	../extern/Diamond/include/backend
+	../extern/Diamond/include
+	../extern/DiamondUtils/include
+	../extern/Quantum2D/include
 )
 
 
@@ -44,14 +44,14 @@ else()
 	set(LINK_LIBS Diamond.lib Quantum2D.lib SDL2.lib SDL2_image.lib SDL2_mixer.lib)
 endif()
 
-link_directories(extern/Diamond/lib extern/Quantum2D/lib extern/SDL2/lib)
+link_directories(../extern/Diamond/lib ../extern/Quantum2D/lib ../extern/SDL2/lib)
 
 
 # Get source files
-file(GLOB_RECURSE SOURCES src/*.cpp)
+set(SOURCES test.cpp)
 
 
 # Build
-add_library(CDiamond SHARED ${SOURCES})
-target_link_libraries(CDiamond ${LINK_LIBS})
-install(TARGETS CDiamond DESTINATION lib)
+add_executable(CDiamondTest ${SOURCES})
+target_link_libraries(CDiamondTest ${LINK_LIBS})
+install(TARGETS CDiamondTest DESTINATION bin)

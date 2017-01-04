@@ -21,6 +21,7 @@ const ref = require('ref');
 const platformdir = process.platform;
 const intPtr = ref.refType('int');
 const Diamond = ffi.Library(__dirname + '/src/CDiamond/lib/' + platformdir + '/libCDiamond', {
+// const Diamond = ffi.Library(__dirname + '/src/CDiamond/lib/' + platformdir + '/CDiamond', {
     // Engine2D
     'dEngine2DConfigureGraphics': ['void', ['string', 'int', 'int', 'bool', 'bool']],
     'dEngine2DConfigureAudio': ['void', ['int', 'int', 'int']],
