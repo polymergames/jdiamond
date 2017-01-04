@@ -95,7 +95,7 @@ void dRenderComponent2DSetSprite(tCD_Handle renderComponent,
 }
 
 tCD_RenderLayer dRenderComponent2DGetLayer(tCD_Handle renderComponent) {
-    (tCD_RenderLayer)(renderComponents[renderComponent]->getLayer());
+    return (tCD_RenderLayer)(renderComponents[renderComponent]->getLayer());
 }
 void dRenderComponent2DSetLayer(tCD_Handle renderComponent,
                                 tCD_RenderLayer newLayer) {

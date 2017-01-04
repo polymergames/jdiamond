@@ -39,11 +39,11 @@ if(APPLE)
 	find_library(SDL_2_MIXER SDL2_mixer)
 	set(LINK_LIBS libDiamond.a libQuantum2D.a ${SDL_2} ${SDL_2_IMAGE} ${SDL_2_MIXER} -stdlib=libc++)
 else()
-	# TODO: windows and linux sdl libs
-	set(LINK_LIBS libDiamond.a)
+	# TODO: linux!
+	set(LINK_LIBS Diamond.lib Quantum2D.lib SDL2.lib SDL2_image.lib SDL2_mixer.lib)
 endif()
 
-link_directories(extern/Diamond/lib extern/Quantum2D/lib)
+link_directories(extern/Diamond/lib extern/Quantum2D/lib extern/SDL2/lib)
 
 
 # Get source files
