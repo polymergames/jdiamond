@@ -1,6 +1,6 @@
 {
   "name": "jdiamond",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A JavaScript wrapper for a native(C++) game engine.",
   "keywords": [
     "game",
