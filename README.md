@@ -77,3 +77,5 @@ jdiamond uses node-ffi to communicate with the C++ Diamond library. See [node-ff
 Diamond uses Simple DirectMedia Layer (SDL), which is Copyright (c) 1997-2014 Sam Lantinga <slouken@libsdl.org>.
 
 jdiamond is Copyright 2016 Ahnaf Siddiqui, and is licensed under the Apache License, Version 2.0 (see LICENSE file).
+
+Artwork (such as laserShip.png and monomer.png) is Copyright 2016 Shah Akandh, all rights reserved.
