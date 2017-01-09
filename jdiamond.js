@@ -42,6 +42,7 @@ const Diamond = ffi.Library(libpath, {
     'dEngine2DInit': ['bool', []],
     'dEngine2DDestroy': ['void', []],
     'dEngine2DLaunchGame': ['void', []],
+    'dEngine2DQuitGame': ['void', []],
     // Game2D
     'dGame2DBenchmark': ['void', ['string']],
     'dGame2DInit': ['bool', ['pointer', 'pointer', 'pointer', 'pointer']],
@@ -193,6 +194,13 @@ exports.launch = function(update, postPhysicsUpdate, quit) {
 
     Diamond.dGame2DInit(ref.NULL, updateCB, postPhysicsUpdateCB, quitCB);
     Diamond.dEngine2DLaunchGame();
+}
+
+/**
+ * Ends the game but does not free engine resources.
+ */
+exports.quit = function() {
+    Diamond.dEngine2DQuitGame();
 }
 
 /**

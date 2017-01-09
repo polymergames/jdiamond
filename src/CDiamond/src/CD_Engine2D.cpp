@@ -65,6 +65,11 @@ void dEngine2DLaunchGame() {
     }
 }
 
+void dEngine2DQuitGame() {
+    if (engine)
+        engine->quit();
+}
+
 Engine2D* dEngine2DGetEngine() {
     return engine;
 }

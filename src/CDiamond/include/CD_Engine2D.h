@@ -60,6 +60,11 @@ CDEXPORT void dEngine2DDestroy();
  */
 CDEXPORT void dEngine2DLaunchGame();
 
+/**
+ * Ends the game- but does not clean up engine resources.
+ */
+CDEXPORT void dEngine2DQuitGame();
+
 #ifdef __cplusplus
 }
 #endif
