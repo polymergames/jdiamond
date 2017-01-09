@@ -10,7 +10,8 @@
   "homepage": "polymergames.com",
   "repository": "https://github.com/polymergames/jdiamond.git",
   "bugs": {
-    "email": "ahnaf@polymergames.com"
+    "email": "ahnaf@polymergames.com",
+    "url": "https://github.com/polymergames/jdiamond/issues"
   },
   "main": "jdiamond",
   "dependencies": {
