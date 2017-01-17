@@ -24,89 +24,89 @@ const intPtr = ref.refType('int');
 const platformdir = process.platform;
 var libpath = __dirname + '/src/CDiamond/lib/' + platformdir;
 if (platformdir == 'win32') {
-    if (process.arch == 'ia32')
-        libpath += '/x86';
-    else
-        libpath += '/x64';
-    libpath += '/CDiamond';
+  if (process.arch == 'ia32')
+      libpath += '/x86';
+  else
+      libpath += '/x64';
+  libpath += '/CDiamond';
 }
 else {
-    libpath += '/libCDiamond';
+  libpath += '/libCDiamond';
 }
 
 // This is the bridge to native Diamond functions
 const Diamond = ffi.Library(libpath, {
-    // Engine2D
-    'dEngine2DConfigureGraphics': ['void', ['string', 'int', 'int', 'bool', 'bool']],
-    'dEngine2DConfigureAudio': ['void', ['int', 'int', 'int']],
-    'dEngine2DInit': ['bool', []],
-    'dEngine2DDestroy': ['void', []],
-    'dEngine2DLaunchGame': ['void', []],
-    'dEngine2DQuitGame': ['void', []],
-    // Game2D
-    'dGame2DBenchmark': ['void', ['string']],
-    'dGame2DInit': ['bool', ['pointer', 'pointer', 'pointer', 'pointer']],
-    'dGame2DDestroy': ['void', []],
-    // Transform2
-    'dTransform2Init': ['bool', []],
-    'dTransform2Destroy': ['void', []],
-    'dTransform2MakeTransform': ['int', ['float', 'float', 'float', 'float', 'float']],
-    'dTransform2DestroyTransform': ['void', ['int']],
-    'dTransform2SetTransform': ['void', ['int', 'float', 'float', 'float', 'float', 'float']],
-    'dTransform2SetPosition': ['void', ['int', 'float', 'float']],
-    'dTransform2GetPositionX': ['float', ['int']],
-    'dTransform2GetPositionY': ['float', ['int']],
-    'dTransform2AddPosition': ['void', ['int', 'float', 'float']],
-    'dTransform2AddPositionX': ['void', ['int', 'float']],
-    'dTransform2AddPositionY': ['void', ['int', 'float']],
-    'dTransform2GetRotation': ['float', ['int']],
-    'dTransform2SetRotation': ['void', ['int', 'float']],
-    'dTransform2AddRotation': ['void', ['int', 'float']],
-    'dTransform2SetScale': ['void', ['int', 'float', 'float']],
-    'dTransform2GetScaleX': ['float', ['int']],
-    'dTransform2GetScaleY': ['float', ['int']],
-    // Renderer2D
-    'dRenderer2DInit': ['bool', []],
-    'dRenderer2DDestroy': ['void', []],
-    'dRenderer2DGetResolution': ['void', [intPtr, intPtr]],
-    'dRenderer2DGetScreenResolution': ['void', [intPtr, intPtr]],
-    'dRenderer2DLoadTexture': ['int', ['string']],
-    'dRenderer2DDestroyTexture': ['void', ['int']],
-    'dRenderer2DMakeRenderComponent': ['int', ['int', 'int', 'int']],
-    'dRenderer2DDestroyRenderComponent': ['void', ['int']],
-    'dRenderComponent2DSetSprite': ['void', ['int', 'int']],
-    'dRenderComponent2DGetLayer': ['int', ['int']],
-    'dRenderComponent2DSetLayer': ['void', ['int', 'int']],
-    'dRenderComponent2DGetPivotX': ['float', ['int']],
-    'dRenderComponent2DGetPivotY': ['float', ['int']],
-    'dRenderComponent2DSetPivot': ['void', ['int', 'float', 'float']],
-    'dRenderComponent2DFlipX': ['void', ['int']],
-    'dRenderComponent2DFlipY': ['void', ['int']],
-    'dRenderComponent2DIsFlippedX': ['bool', ['int']],
-    'dRenderComponent2DIsFlippedY': ['bool', ['int']],
-    // ParticleSystem2D
-    'dParticleSystem2DInit': ['bool', ['int']],
-    'dParticleSystem2DDestroy': ['void', []],
-    'dParticleSystem2DMakeEmitter': ['int', ['int', 'int']],
-    'dParticleSystem2DSetEmitterConfig': ['void', ['int', 'int']],
-    'dParticleSystem2DDestroyEmitter': ['void', ['int']],
-    'dParticleSystem2DUpdate': ['void', ['int']],
-    // Config
-    'dConfigInitConfigLoader': ['void', ['string']],
-    'dConfigDestroyAll': ['void', []],
-    'dConfigMakeConfigTable': ['int', []],
-    'dConfigLoadConfigTable': ['int', ['string']],
-    'dConfigDestroyConfigTable': ['void', ['int']],
-    'dConfigWriteConfig': ['void', ['int', 'string']],
-    'dConfigHasKey': ['bool', ['int', 'string']],
-    'dConfigGet': ['string', ['int', 'string']],
-    'dConfigGetInt': ['int', ['int', 'string']],
-    'dConfigGetFloat': ['float', ['int', 'string']],
-    'dConfigGetBool': ['bool', ['int', 'string']],
-    'dConfigSet': ['void', ['int', 'string', 'string']],
-    'dConfigSetInt': ['void', ['int', 'string', 'int']],
-    'dConfigSetFloat': ['void', ['int', 'string', 'float']],
-    'dConfigSetBool': ['void', ['int', 'string', 'bool']]
+  // Engine2D
+  'dEngine2DConfigureGraphics': ['void', ['string', 'int', 'int', 'bool', 'bool']],
+  'dEngine2DConfigureAudio': ['void', ['int', 'int', 'int']],
+  'dEngine2DInit': ['bool', []],
+  'dEngine2DDestroy': ['void', []],
+  'dEngine2DLaunchGame': ['void', []],
+  'dEngine2DQuitGame': ['void', []],
+  // Game2D
+  'dGame2DBenchmark': ['void', ['string']],
+  'dGame2DInit': ['bool', ['pointer', 'pointer', 'pointer', 'pointer']],
+  'dGame2DDestroy': ['void', []],
+  // Transform2
+  'dTransform2Init': ['bool', []],
+  'dTransform2Destroy': ['void', []],
+  'dTransform2MakeTransform': ['int', ['float', 'float', 'float', 'float', 'float']],
+  'dTransform2DestroyTransform': ['void', ['int']],
+  'dTransform2SetTransform': ['void', ['int', 'float', 'float', 'float', 'float', 'float']],
+  'dTransform2SetPosition': ['void', ['int', 'float', 'float']],
+  'dTransform2GetPositionX': ['float', ['int']],
+  'dTransform2GetPositionY': ['float', ['int']],
+  'dTransform2AddPosition': ['void', ['int', 'float', 'float']],
+  'dTransform2AddPositionX': ['void', ['int', 'float']],
+  'dTransform2AddPositionY': ['void', ['int', 'float']],
+  'dTransform2GetRotation': ['float', ['int']],
+  'dTransform2SetRotation': ['void', ['int', 'float']],
+  'dTransform2AddRotation': ['void', ['int', 'float']],
+  'dTransform2SetScale': ['void', ['int', 'float', 'float']],
+  'dTransform2GetScaleX': ['float', ['int']],
+  'dTransform2GetScaleY': ['float', ['int']],
+  // Renderer2D
+  'dRenderer2DInit': ['bool', []],
+  'dRenderer2DDestroy': ['void', []],
+  'dRenderer2DGetResolution': ['void', [intPtr, intPtr]],
+  'dRenderer2DGetScreenResolution': ['void', [intPtr, intPtr]],
+  'dRenderer2DLoadTexture': ['int', ['string']],
+  'dRenderer2DDestroyTexture': ['void', ['int']],
+  'dRenderer2DMakeRenderComponent': ['int', ['int', 'int', 'int']],
+  'dRenderer2DDestroyRenderComponent': ['void', ['int']],
+  'dRenderComponent2DSetSprite': ['void', ['int', 'int']],
+  'dRenderComponent2DGetLayer': ['int', ['int']],
+  'dRenderComponent2DSetLayer': ['void', ['int', 'int']],
+  'dRenderComponent2DGetPivotX': ['float', ['int']],
+  'dRenderComponent2DGetPivotY': ['float', ['int']],
+  'dRenderComponent2DSetPivot': ['void', ['int', 'float', 'float']],
+  'dRenderComponent2DFlipX': ['void', ['int']],
+  'dRenderComponent2DFlipY': ['void', ['int']],
+  'dRenderComponent2DIsFlippedX': ['bool', ['int']],
+  'dRenderComponent2DIsFlippedY': ['bool', ['int']],
+  // ParticleSystem2D
+  'dParticleSystem2DInit': ['bool', ['int']],
+  'dParticleSystem2DDestroy': ['void', []],
+  'dParticleSystem2DMakeEmitter': ['int', ['int', 'int']],
+  'dParticleSystem2DSetEmitterConfig': ['void', ['int', 'int']],
+  'dParticleSystem2DDestroyEmitter': ['void', ['int']],
+  'dParticleSystem2DUpdate': ['void', ['int']],
+  // Config
+  'dConfigInitConfigLoader': ['void', ['string']],
+  'dConfigDestroyAll': ['void', []],
+  'dConfigMakeConfigTable': ['int', []],
+  'dConfigLoadConfigTable': ['int', ['string']],
+  'dConfigDestroyConfigTable': ['void', ['int']],
+  'dConfigWriteConfig': ['void', ['int', 'string']],
+  'dConfigHasKey': ['bool', ['int', 'string']],
+  'dConfigGet': ['string', ['int', 'string']],
+  'dConfigGetInt': ['int', ['int', 'string']],
+  'dConfigGetFloat': ['float', ['int', 'string']],
+  'dConfigGetBool': ['bool', ['int', 'string']],
+  'dConfigSet': ['void', ['int', 'string', 'string']],
+  'dConfigSetInt': ['void', ['int', 'string', 'int']],
+  'dConfigSetFloat': ['void', ['int', 'string', 'float']],
+  'dConfigSetBool': ['void', ['int', 'string', 'bool']]
 });
 
 // jdiamond API starts here
@@ -115,114 +115,123 @@ const Diamond = ffi.Library(libpath, {
  * Configuration for Diamond engine with default values.
  */
 exports.Config = function() {
-    this.windowTitle = "A Game Without a Name";
-    this.windowWidth = 1280;
-    this.windowHeight = 720;
-    this.fullscreen = false;
-    this.vsync = false;
-    this.numAudioChannels = 2;
-    this.audioFrequency = 44100; // hertz
-    this.audioSampleSize = 2048; // bytes
-    // estimate for the max number of particles
-    // that may be present at any time.
-    this.particlePoolSize = 100;
-    this.benchmark = false;
-    this.benchmarkFile = "benchmark.log";
+  this.windowTitle = "A Game Without a Name";
+  this.windowWidth = 1280;
+  this.windowHeight = 720;
+  this.fullscreen = false;
+  this.vsync = false;
+  this.numAudioChannels = 2;
+  this.audioFrequency = 44100; // hertz
+  this.audioSampleSize = 2048; // bytes
+  // estimate for the max number of particles
+  // that may be present at any time.
+  this.particlePoolSize = 100;
+  this.benchmark = false;
+  this.benchmarkFile = "benchmark.log";
 }
 
 /**
  * Initializes Diamond engine and its subsystems.
  */
 exports.init = function(config) {
-    var success = true;
+  var success = true;
 
-    if (!config) {
-        config = new exports.Config();
-    }
+  if (!config) {
+    config = new exports.Config();
+  }
 
-    Diamond.dEngine2DConfigureGraphics(
-        config.windowTitle,
-        config.windowWidth,
-        config.windowHeight,
-        config.fullscreen,
-        config.vsync
-    );
-    Diamond.dEngine2DConfigureAudio(
-        config.numAudioChannels,
-        config.audioFrequency,
-        config.audioSampleSize
-    );
+  Diamond.dEngine2DConfigureGraphics(
+    config.windowTitle,
+    config.windowWidth,
+    config.windowHeight,
+    config.fullscreen,
+    config.vsync
+  );
+  Diamond.dEngine2DConfigureAudio(
+    config.numAudioChannels,
+    config.audioFrequency,
+    config.audioSampleSize
+  );
 
-    if (config.benchmark)
-        Diamond.dGame2DBenchmark(config.benchmarkFile);
+  if (config.benchmark)
+    Diamond.dGame2DBenchmark(config.benchmarkFile);
 
-    if (!(Diamond.dEngine2DInit() &&
-          Diamond.dTransform2Init() &&
-          Diamond.dRenderer2DInit() &&
-          Diamond.dParticleSystem2DInit(config.particlePoolSize))) {
-        success = false;
-    }
+  if (!(Diamond.dEngine2DInit() &&
+        Diamond.dTransform2Init() &&
+        Diamond.dRenderer2DInit() &&
+        Diamond.dParticleSystem2DInit(config.particlePoolSize))) {
+    success = false;
+  }
 
-    Diamond.dConfigInitConfigLoader("");
+  Diamond.dConfigInitConfigLoader("");
 
-    return success;
+  return success;
 }
 
 /**
  * Begins the game loop in the Diamond backend.
  */
 exports.launch = function(update, postPhysicsUpdate, quit) {
-    var postPhysicsUpdateCB = ref.NULL;
-    var quitCB = ref.NULL;
+  var postPhysicsUpdateCB = ref.NULL;
+  var quitCB = ref.NULL;
 
-    const updateCB = ffi.Callback('void', ['int'], function(delta) {
-        if (update) {
-            update(delta);
-        }
-
-        // update Diamond's non-core systems (ex. particles)
-        // that aren't automatically updated within
-        // Diamond Engine's game loop.
-        Diamond.dParticleSystem2DUpdate(delta);
-    });
-
-    if (postPhysicsUpdate) {
-        postPhysicsUpdateCB = ffi.Callback('void', ['int'], postPhysicsUpdate);
-    }
-    if (quit) {
-        quitCB = ffi.Callback('void', [], quit);
+  const updateCB = ffi.Callback('void', ['int'], function(delta) {
+    if (update) {
+      update(delta);
     }
 
-    Diamond.dGame2DInit(ref.NULL, updateCB, postPhysicsUpdateCB, quitCB);
-    Diamond.dEngine2DLaunchGame();
+    // update Diamond's non-core systems (ex. particles)
+    // that aren't automatically updated within
+    // Diamond Engine's game loop.
+    Diamond.dParticleSystem2DUpdate(delta);
+  });
+
+  if (postPhysicsUpdate) {
+    postPhysicsUpdateCB = ffi.Callback('void', ['int'], postPhysicsUpdate);
+  }
+  if (quit) {
+    quitCB = ffi.Callback('void', [], quit);
+  }
+
+  Diamond.dGame2DInit(ref.NULL, updateCB, postPhysicsUpdateCB, quitCB);
+  Diamond.dEngine2DLaunchGame();
 }
 
 /**
  * Ends the game but does not free engine resources.
  */
 exports.quit = function() {
-    Diamond.dEngine2DQuitGame();
+  Diamond.dEngine2DQuitGame();
 }
 
 /**
  * Frees all game and engine resources.
  */
 exports.cleanUp = function() {
-    Diamond.dGame2DDestroy();
-    Diamond.dConfigDestroyAll();
-    Diamond.dParticleSystem2DDestroy();
-    Diamond.dRenderer2DDestroy();
-    Diamond.dTransform2Destroy();
-    Diamond.dEngine2DDestroy();
+  Diamond.dGame2DDestroy();
+  Diamond.dConfigDestroyAll();
+  Diamond.dParticleSystem2DDestroy();
+  Diamond.dRenderer2DDestroy();
+  Diamond.dTransform2Destroy();
+  Diamond.dEngine2DDestroy();
 }
 
 // Objects of the following classes reference their corresponding
 // objects in the Diamond backend using a handle.
-// set(other) updates this component's properties to those in other.
+
+// obj returns a Javascript object containing properties
+// corresponding to the current state of the properties in the jdiamond component.
+// while the jdiamond component might rely on getters and setters
+// for some fields, the returned object is a serializable snapshot
+// containing only value-properties.
+// this is a snapshot, and will not maintain any connection to the actual
+// jdiamond component.
+
+// set(other) updates a component's properties to those in other.
 // other should be an object with the same interface
 // for its component properties as the jdiamond component, but does
 // not need to contain all component properties- only the properties
-// defined in other will be updated in this.
+// defined in other will be updated in component this.
 
 // TODO: test performance change from caching some values
 // (ex. position data in transform) to return when getting
@@ -234,250 +243,289 @@ exports.cleanUp = function() {
 // backend anyways, and in game logic-specific data
 // that isn't stored in the Diamond backend).
 exports.Transform2 = class Transform2 {
-    constructor(position = {x: 0, y: 0},
-                rotation = 0,
-                scale    = {x: 1, y: 1}) {
-        this.handle = Diamond.dTransform2MakeTransform(
-            position.x, position.y, rotation, scale.x, scale.y
-        );
-    }
-    destroy() {
-        Diamond.dTransform2DestroyTransform(this.handle);
-    }
+  constructor(position = {x: 0, y: 0},
+              rotation = 0,
+              scale    = {x: 1, y: 1}) {
+    this.handle = Diamond.dTransform2MakeTransform(
+      position.x, position.y, rotation, scale.x, scale.y
+    );
+  }
+  destroy() {
+    Diamond.dTransform2DestroyTransform(this.handle);
+  }
 
-    set(other) {
-      if (other.position)
-        this.position = other.position
+  get obj() {
+    return {
+      position: this.position,
+      rotation: this.rotation,
+      scale: this.scale
+    };
+  }
 
-      if (other.rotation)
-        this.rotation = other.rotation
+  set(other) {
+    if (other.position)
+      this.position = other.position;
 
-      if (other.scale)
-        this.scale = other.scale
-    }
+    if (other.rotation)
+      this.rotation = other.rotation;
 
-    // note: setting position.x or position.y directly
-    // will not change the underlying Diamond transform.
-    // position can only be changed by setting position
-    // to a new {x, y} object, or by using add function.
-    get position() {
-        return {
-            x: Diamond.dTransform2GetPositionX(this.handle),
-            y: Diamond.dTransform2GetPositionY(this.handle),
-            add: function(dpos) {
-                Diamond.dTransform2AddPosition(this.handle, dpos.x, dpos.y);
-            },
-            addX: function(dx) {
-                Diamond.dTransform2AddPositionX(this.handle, dx);
-            },
-            addY: function(dy) {
-                Diamond.dTransform2AddPositionY(this.handle, dy);
-            }
-        };
-    }
-    set position(position) {
-        Diamond.dTransform2SetPosition(this.handle, position.x, position.y);
-    }
+    if (other.scale)
+      this.scale = other.scale;
+  }
 
-    get rotation() {
-        return Diamond.dTransform2GetRotation(this.handle);
-    }
-    set rotation(rotation) {
-        Diamond.dTransform2SetRotation(this.handle, rotation);
-    }
+  // note: setting position.x or position.y directly
+  // will not change the underlying Diamond transform.
+  // position can only be changed by setting position
+  // to a new {x, y} object, or by using add function.
+  get position() {
+    return {
+      x: Diamond.dTransform2GetPositionX(this.handle),
+      y: Diamond.dTransform2GetPositionY(this.handle),
+      add: function(dpos) {
+        Diamond.dTransform2AddPosition(this.handle, dpos.x, dpos.y);
+      },
+      addX: function(dx) {
+        Diamond.dTransform2AddPositionX(this.handle, dx);
+      },
+      addY: function(dy) {
+        Diamond.dTransform2AddPositionY(this.handle, dy);
+      }
+    };
+  }
+  set position(position) {
+    Diamond.dTransform2SetPosition(this.handle, position.x, position.y);
+  }
 
-    // see comment for setting position.x and position.y,
-    // applies to scale as well.
-    get scale() {
-        return {
-            x: Diamond.dTransform2GetScaleX(this.handle),
-            y: Diamond.dTransform2GetScaleY(this.handle)
-        };
-    }
-    set scale(scale) {
-        Diamond.dTransform2SetScale(this.handle, scale.x, scale.y);
-    }
+  get rotation() {
+    return Diamond.dTransform2GetRotation(this.handle);
+  }
+  set rotation(rotation) {
+    Diamond.dTransform2SetRotation(this.handle, rotation);
+  }
 
-    // TODO: this doesn't seem to work
-    toString() {
-        return "handle: " + this.handle + ", " +
-               "position: " + this.position.toString() + ", " +
-               "rotation: " + this.rotation.toString() + ", " +
-               "scale: " + this.scale.toString();
-    }
+  // see comment for setting position.x and position.y,
+  // applies to scale as well.
+  get scale() {
+    return {
+      x: Diamond.dTransform2GetScaleX(this.handle),
+      y: Diamond.dTransform2GetScaleY(this.handle)
+    };
+  }
+  set scale(scale) {
+    Diamond.dTransform2SetScale(this.handle, scale.x, scale.y);
+  }
+
+  // TODO: this doesn't seem to work
+  toString() {
+    return "handle: " + this.handle + ", " +
+           "position: " + this.position.toString() + ", " +
+           "rotation: " + this.rotation.toString() + ", " +
+           "scale: " + this.scale.toString();
+  }
 }
 
 exports.RenderComponent2D = class RenderComponent2D {
-    constructor(transform, texture, layer = 0) {
-        this.handle = Diamond.dRenderer2DMakeRenderComponent(
-            transform.handle, texture.handle, layer
-        );
-    }
-    destroy() {
-        Diamond.dRenderer2DDestroyRenderComponent(this.handle);
-    }
+  constructor(transform, texture, layer = 0) {
+    this.texture = texture;
+    this.handle = Diamond.dRenderer2DMakeRenderComponent(
+      transform.handle, texture.handle, layer
+    );
+  }
+  destroy() {
+    Diamond.dRenderer2DDestroyRenderComponent(this.handle);
+  }
 
-    set(other) {
-      if (other.sprite)
-        this.sprite = other.sprite
+  get obj() {
+    return {
+      sprite: this.sprite,
+      layer: this.layer,
+      pivot: this.pivot,
+      isFlippedX: this.isFlippedX,
+      isFlippedY: this.isFlippedY
+    }
+  }
 
-      if (other.layer)
-        this.layer = other.layer
+  set(other) {
+    if (other.sprite)
+      this.sprite = other.sprite;
 
-      if (other.pivot)
-        this.pivot = other.pivot
+    if (other.layer)
+      this.layer = other.layer;
 
-      if (other.isFlippedX != this.isFlippedX)
-        this.flipX()
+    if (other.pivot)
+      this.pivot = other.pivot;
 
-      if (other.isFlippedY != this.isFlippedY)
-        this.flipY()
-    }
+    if (other.isFlippedX != this.isFlippedX)
+      this.flipX();
 
-    // don't yet support getting a sprite- sorry
-    set sprite(texture) {
-        Diamond.dRenderComponent2DSetSprite(this.handle, texture.handle);
-    }
+    if (other.isFlippedY != this.isFlippedY)
+      this.flipY();
+  }
 
-    get layer() {
-        return Diamond.dRenderComponent2DGetLayer(this.handle);
-    }
-    set layer(layer) {
-        Diamond.dRenderComponent2DSetLayer(this.handle, layer);
-    }
+  get sprite() {
+    return this.texture;
+  }
+  set sprite(texture) {
+    this.texture = texture;
+    Diamond.dRenderComponent2DSetSprite(this.handle, texture.handle);
+  }
 
-    get pivot() {
-        return {
-            x: Diamond.dRenderComponent2DGetPivotX(this.handle),
-            y: Diamond.dRenderComponent2DGetPivotY(this.handle)
-        };
-    }
-    set pivot(pivot) {
-        Diamond.dRenderComponent2DSetPivot(this.handle, pivot.x, pivot.y);
-    }
+  get layer() {
+    return Diamond.dRenderComponent2DGetLayer(this.handle);
+  }
+  set layer(layer) {
+    Diamond.dRenderComponent2DSetLayer(this.handle, layer);
+  }
 
-    flipX() {
-        Diamond.dRenderComponent2DFlipX(this.handle);
-    }
-    flipY() {
-        Diamond.dRenderComponent2DFlipY(this.handle);
-    }
+  get pivot() {
+    return {
+      x: Diamond.dRenderComponent2DGetPivotX(this.handle),
+      y: Diamond.dRenderComponent2DGetPivotY(this.handle)
+    };
+  }
+  set pivot(pivot) {
+    Diamond.dRenderComponent2DSetPivot(this.handle, pivot.x, pivot.y);
+  }
 
-    get isFlippedX() {
-        return Diamond.dRenderComponent2DIsFlippedX(this.handle);
-    }
-    get isFlippedY() {
-        return Diamond.dRenderComponent2DIsFlippedY(this.handle);
-    }
+  flipX() {
+    Diamond.dRenderComponent2DFlipX(this.handle);
+  }
+  flipY() {
+    Diamond.dRenderComponent2DFlipY(this.handle);
+  }
+
+  get isFlippedX() {
+    return Diamond.dRenderComponent2DIsFlippedX(this.handle);
+  }
+  get isFlippedY() {
+    return Diamond.dRenderComponent2DIsFlippedY(this.handle);
+  }
 }
 
 exports.renderer = {
-    loadTexture: function(path) {
-        const handle = Diamond.dRenderer2DLoadTexture(path);
-        if (handle < 0)
-            return null;
-        return {handle: handle}
-    },
-    destroyTexture: function(texture) {
-        Diamond.dRenderer2DDestroyTexture(texture.handle);
-    },
+  loadTexture: function(path) {
+    const handle = Diamond.dRenderer2DLoadTexture(path);
+    if (handle < 0)
+      return null;
+    return {handle: handle}
+  },
+  destroyTexture: function(texture) {
+    Diamond.dRenderer2DDestroyTexture(texture.handle);
+  },
 
-    get resolution() {
-        var xbuf = ref.alloc('int');
-        var ybuf = ref.alloc('int');
+  get resolution() {
+    var xbuf = ref.alloc('int');
+    var ybuf = ref.alloc('int');
 
-        Diamond.dRenderer2DGetResolution(xbuf, ybuf);
+    Diamond.dRenderer2DGetResolution(xbuf, ybuf);
 
-        return {
-            x: xbuf.deref(),
-            y: ybuf.deref()
-        };
-    },
-    get screenResolution() {
-        var xbuf = ref.alloc('int');
-        var ybuf = ref.alloc('int');
+    return {
+      x: xbuf.deref(),
+      y: ybuf.deref()
+    };
+  },
+  get screenResolution() {
+    var xbuf = ref.alloc('int');
+    var ybuf = ref.alloc('int');
 
-        Diamond.dRenderer2DGetScreenResolution(xbuf, ybuf);
+    Diamond.dRenderer2DGetScreenResolution(xbuf, ybuf);
 
-        return {
-            x: xbuf.deref(),
-            y: ybuf.deref()
-        };
-    }
+    return {
+      x: xbuf.deref(),
+      y: ybuf.deref()
+    };
+  }
 }
 
 exports.ParticleEmitter2D = class ParticleEmitter2D {
-    constructor(config, transform) {
-        this.transform = transform;
-        this.configTable = Diamond.dConfigMakeConfigTable();
+  constructor(config, transform) {
+    this.mConfig = config;
+    this.transform = transform;
+    this.configTable = Diamond.dConfigMakeConfigTable();
 
-        // key to success!
-        for (var key in config) {
-            Diamond.dConfigSet(this.configTable, key, config[key].toString());
-        }
-
-        this.handle = Diamond.dParticleSystem2DMakeEmitter(
-            this.configTable, transform.handle
-        );
-    }
-    // note: this does not destroy the particle emitter's
-    // associated transform!
-    destroy() {
-        Diamond.dParticleSystem2DDestroyEmitter(this.handle);
-        Diamond.dConfigDestroyConfigTable(this.configTable);
+    // key to success!
+    for (var key in config) {
+      Diamond.dConfigSet(this.configTable, key, config[key].toString());
     }
 
-    // don't yet support getting the config- sorry
-    set config(config) {
-      for (let key in config) {
-        Diamond.dConfigSet(this.configTable, key, config[key].toString());
-      }
-      Diamond.dParticleSystem2DSetEmitterConfig(this.handle, this.configTable);
+    this.handle = Diamond.dParticleSystem2DMakeEmitter(
+      this.configTable, transform.handle
+    );
+  }
+  // note: this does not destroy the particle emitter's
+  // associated transform!
+  destroy() {
+    Diamond.dParticleSystem2DDestroyEmitter(this.handle);
+    Diamond.dConfigDestroyConfigTable(this.configTable);
+  }
+
+  get obj() {
+    return {
+      config: this.mConfig,
+      transform: this.transform
+    }
+  }
+
+  set(other) {
+    if (other.config)
+      this.config = other.config;
+
+    if (other.transform)
+      this.transform = other.transform;
+  }
+
+  // Warning: changing the returned object won't change this component's
+  // actual config! Set this component.config to your new config object after making
+  // changes in order to update this component.
+  get config() {
+    return this.mConfig;
+  }
+
+  set config(config) {
+    this.mConfig = config;
+
+    for (let key in config) {
+      Diamond.dConfigSet(this.configTable, key, config[key].toString());
     }
 
-    set(other) {
-      if (other.transform)
-        this.transform = other.transform
-
-      if (other.config)
-        this.config = other.config
-    }
+    Diamond.dParticleSystem2DSetEmitterConfig(this.handle, this.configTable);
+  }
 }
 
 exports.Math = {
-    RAD2DEG: 180 / Math.PI,
-    DEG2RAD: Math.PI / 180
+  RAD2DEG: 180 / Math.PI,
+  DEG2RAD: Math.PI / 180
 }
 
 exports.Vector2 = {
-    scalar: function(vec, scalar) {
-        return {
-            x: vec.x * scalar,
-            y: vec.y * scalar
-        };
-    },
-    scalarVec: function(vec, scalar) {
-        return {
-            x: vec.x * scalar.x,
-            y: vec.y * scalar.y
-        }
-    },
-    rotateVector: function(vec, radians) {
-        const sinrad = Math.sin(radians);
-        const cosrad = Math.cos(radians);
-        return {
-            x: vec.x * cosrad - vec.y * sinrad,
-            y: vec.x * sinrad + vec.y * cosrad
-        };
+  scalar: function(vec, scalar) {
+    return {
+      x: vec.x * scalar,
+      y: vec.y * scalar
+    };
+  },
+  scalarVec: function(vec, scalar) {
+    return {
+      x: vec.x * scalar.x,
+      y: vec.y * scalar.y
     }
+  },
+  rotateVector: function(vec, radians) {
+    const sinrad = Math.sin(radians);
+    const cosrad = Math.cos(radians);
+    return {
+      x: vec.x * cosrad - vec.y * sinrad,
+      y: vec.x * sinrad + vec.y * cosrad
+    };
+  }
 }
 
 exports.Util = {
-    objToKeyvalPairs: function(obj) {
-        var str = "";
-        for (var prop in obj) {
-            str += prop + ": " + obj[prop] + "\n";
-        }
-        return str;
+  objToKeyvalPairs: function(obj) {
+    var str = "";
+    for (var prop in obj) {
+      str += prop + ": " + obj[prop] + "\n";
     }
+    return str;
+  }
 }
