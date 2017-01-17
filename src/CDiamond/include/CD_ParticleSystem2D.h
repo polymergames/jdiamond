@@ -32,6 +32,8 @@ CDEXPORT void dParticleSystem2DDestroy();
 
 CDEXPORT tCD_Handle dParticleSystem2DMakeEmitter(tCD_Handle config, tCD_Handle transform);
 
+CDEXPORT void dParticleSystem2DSetEmitterConfig(tCD_Handle emitter, tCD_Handle config);
+
 CDEXPORT void dParticleSystem2DDestroyEmitter(tCD_Handle emitter);
 
 CDEXPORT void dParticleSystem2DUpdate(tD_delta delta);

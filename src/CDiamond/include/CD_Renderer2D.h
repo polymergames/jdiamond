@@ -46,17 +46,17 @@ CDEXPORT tCD_Handle dRenderer2DLoadTexture(char* path);
 CDEXPORT void dRenderer2DDestroyTexture(tCD_Handle texture);
 
 CDEXPORT tCD_Handle dRenderer2DMakeRenderComponent(tCD_Handle transform,
-                                          tCD_Handle texture,
-                                          tCD_RenderLayer layer);
+                                                   tCD_Handle texture,
+                                                   tCD_RenderLayer layer);
 
 CDEXPORT void dRenderer2DDestroyRenderComponent(tCD_Handle renderComponent);
 
 CDEXPORT void dRenderComponent2DSetSprite(tCD_Handle renderComponent,
-                                 tCD_Handle texture);
+                                          tCD_Handle texture);
 
 CDEXPORT tCD_RenderLayer dRenderComponent2DGetLayer(tCD_Handle renderComponent);
 CDEXPORT void dRenderComponent2DSetLayer(tCD_Handle renderComponent,
-                                tCD_RenderLayer newLayer);
+                                         tCD_RenderLayer newLayer);
 
 CDEXPORT dVector2f dRenderComponent2DGetPivot(tCD_Handle renderComponent);
 
@@ -64,9 +64,9 @@ CDEXPORT float dRenderComponent2DGetPivotX(tCD_Handle renderComponent);
 CDEXPORT float dRenderComponent2DGetPivotY(tCD_Handle renderComponent);
 
 CDEXPORT void dRenderComponent2DVSetPivot(tCD_Handle renderComponent,
-                                 dVector2f newPivot);
+                                          dVector2f newPivot);
 CDEXPORT void dRenderComponent2DSetPivot(tCD_Handle renderComponent,
-                                float newPivotX, float newPivotY);
+                                         float newPivotX, float newPivotY);
 
 CDEXPORT void dRenderComponent2DFlipX(tCD_Handle renderComponent);
 CDEXPORT void dRenderComponent2DFlipY(tCD_Handle renderComponent);

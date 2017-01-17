@@ -88,6 +88,7 @@ const Diamond = ffi.Library(libpath, {
     'dParticleSystem2DInit': ['bool', ['int']],
     'dParticleSystem2DDestroy': ['void', []],
     'dParticleSystem2DMakeEmitter': ['int', ['int', 'int']],
+    'dParticleSystem2DSetEmitterConfig': ['void', ['int', 'int']],
     'dParticleSystem2DDestroyEmitter': ['void', ['int']],
     'dParticleSystem2DUpdate': ['void', ['int']],
     // Config
@@ -217,6 +218,11 @@ exports.cleanUp = function() {
 
 // Objects of the following classes reference their corresponding
 // objects in the Diamond backend using a handle.
+// set(other) updates this component's properties to those in other.
+// other should be an object with the same interface
+// for its component properties as the jdiamond component, but does
+// not need to contain all component properties- only the properties
+// defined in other will be updated in this.
 
 // TODO: test performance change from caching some values
 // (ex. position data in transform) to return when getting
@@ -237,6 +243,17 @@ exports.Transform2 = class Transform2 {
     }
     destroy() {
         Diamond.dTransform2DestroyTransform(this.handle);
+    }
+
+    set(other) {
+      if (other.position)
+        this.position = other.position
+
+      if (other.rotation)
+        this.rotation = other.rotation
+
+      if (other.scale)
+        this.scale = other.scale
     }
 
     // note: setting position.x or position.y directly
@@ -298,6 +315,23 @@ exports.RenderComponent2D = class RenderComponent2D {
     }
     destroy() {
         Diamond.dRenderer2DDestroyRenderComponent(this.handle);
+    }
+
+    set(other) {
+      if (other.sprite)
+        this.sprite = other.sprite
+
+      if (other.layer)
+        this.layer = other.layer
+
+      if (other.pivot)
+        this.pivot = other.pivot
+
+      if (other.isFlippedX != this.isFlippedX)
+        this.flipX()
+
+      if (other.isFlippedY != this.isFlippedY)
+        this.flipY()
     }
 
     // don't yet support getting a sprite- sorry
@@ -375,24 +409,38 @@ exports.renderer = {
 exports.ParticleEmitter2D = class ParticleEmitter2D {
     constructor(config, transform) {
         this.transform = transform;
-
-        const configTable = Diamond.dConfigMakeConfigTable();
+        this.configTable = Diamond.dConfigMakeConfigTable();
 
         // key to success!
         for (var key in config) {
-            Diamond.dConfigSet(configTable, key, config[key].toString());
+            Diamond.dConfigSet(this.configTable, key, config[key].toString());
         }
 
         this.handle = Diamond.dParticleSystem2DMakeEmitter(
-            configTable, transform.handle
+            this.configTable, transform.handle
         );
-
-        Diamond.dConfigDestroyConfigTable(configTable);
     }
     // note: this does not destroy the particle emitter's
     // associated transform!
     destroy() {
         Diamond.dParticleSystem2DDestroyEmitter(this.handle);
+        Diamond.dConfigDestroyConfigTable(this.configTable);
+    }
+
+    // don't yet support getting the config- sorry
+    set config(config) {
+      for (let key in config) {
+        Diamond.dConfigSet(this.configTable, key, config[key].toString());
+      }
+      Diamond.dParticleSystem2DSetEmitterConfig(this.handle, this.configTable);
+    }
+
+    set(other) {
+      if (other.transform)
+        this.transform = other.transform
+
+      if (other.config)
+        this.config = other.config
     }
 }
 

@@ -72,6 +72,12 @@ tCD_Handle dParticleSystem2DMakeEmitter(tCD_Handle config, tCD_Handle transform)
     ));
 }
 
+CDEXPORT void dParticleSystem2DSetEmitterConfig(tCD_Handle emitter, tCD_Handle config) {
+    auto particleConfig = ParticleSystem2DConfig(dConfigGetConfigTable(config),
+                                                 *dGetTextureFactory());
+    particleEmitters[emitter].config() = particleConfig;
+}
+
 void dParticleSystem2DDestroyEmitter(tCD_Handle emitter) {
     particleEmitters.erase(emitter);
 }
