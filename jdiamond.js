@@ -109,6 +109,11 @@ const Diamond = ffi.Library(libpath, {
   'dConfigSetBool': ['void', ['int', 'string', 'bool']]
 });
 
+// shallow copies an object
+function copyObj(from, to) {
+  Object.assign(to, from)
+}
+
 // jdiamond API starts here
 
 /**
@@ -255,11 +260,14 @@ exports.Transform2 = class Transform2 {
   }
 
   get obj() {
-    return {
+    let objref = {
       position: this.position,
       rotation: this.rotation,
       scale: this.scale
-    };
+    }
+    let objcopy = {}
+    copyObj(objref, objcopy)
+    return objcopy;
   }
 
   set(other) {
@@ -336,13 +344,16 @@ exports.RenderComponent2D = class RenderComponent2D {
   }
 
   get obj() {
-    return {
+    let objref = {
       sprite: this.sprite,
       layer: this.layer,
       pivot: this.pivot,
       isFlippedX: this.isFlippedX,
       isFlippedY: this.isFlippedY
     }
+    let objcopy = {}
+    copyObj(objref, objcopy)
+    return objcopy
   }
 
   set(other) {
@@ -439,7 +450,8 @@ exports.renderer = {
 
 exports.ParticleEmitter2D = class ParticleEmitter2D {
   constructor(config, transform) {
-    this.mConfig = config;
+    this.mConfig = {};
+    copyObj(config, this.mConfig)
     this.transform = transform;
     this.configTable = Diamond.dConfigMakeConfigTable();
 
@@ -460,18 +472,21 @@ exports.ParticleEmitter2D = class ParticleEmitter2D {
   }
 
   get obj() {
-    return {
-      config: this.mConfig,
-      transform: this.transform
+    let objref = {
+      config: this.mConfig
+      // transform: this.transform
     }
+    let objcopy = {}
+    objcopy = copyObj(objref, objcopy)
+    return objcopy
   }
 
   set(other) {
     if (other.config)
       this.config = other.config;
 
-    if (other.transform)
-      this.transform = other.transform;
+    // if (other.transform)
+    //   this.transform = other.transform;
   }
 
   // Warning: changing the returned object won't change this component's
@@ -482,7 +497,7 @@ exports.ParticleEmitter2D = class ParticleEmitter2D {
   }
 
   set config(config) {
-    this.mConfig = config;
+    copyObj(config, this.mConfig)
 
     for (let key in config) {
       Diamond.dConfigSet(this.configTable, key, config[key].toString());
