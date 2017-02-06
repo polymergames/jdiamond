@@ -479,7 +479,9 @@ exports.ParticleEmitter2D = class ParticleEmitter2D {
 
   set(other) {
     if (other.config)
-      this.config = other.config;
+      this.config = other.config
+    else
+      this.config = other
 
     // if (other.transform)
     //   this.transform = other.transform;
