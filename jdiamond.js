@@ -472,12 +472,8 @@ exports.ParticleEmitter2D = class ParticleEmitter2D {
   }
 
   get obj() {
-    let objref = {
-      config: this.mConfig
-      // transform: this.transform
-    }
     let objcopy = {}
-    objcopy = copyObj(objref, objcopy)
+    copyObj(this.mConfig, objcopy)
     return objcopy
   }
 
