@@ -106,7 +106,18 @@ const Diamond = ffi.Library(libpath, {
   'dConfigSet': ['void', ['int', 'string', 'string']],
   'dConfigSetInt': ['void', ['int', 'string', 'int']],
   'dConfigSetFloat': ['void', ['int', 'string', 'float']],
-  'dConfigSetBool': ['void', ['int', 'string', 'bool']]
+  'dConfigSetBool': ['void', ['int', 'string', 'bool']],
+  // Util
+  'dPointList2DInit': ['int', []],
+  'dPointList2DAddPoint': ['void', ['int', 'float', 'float']],
+  'dPointList2DPop': ['void', ['int']],
+  'dPointList2DClear': ['void', ['int']],
+  'dPointList2DDelete': ['void', ['int']],
+  // DebugDraw
+  'dDebugDrawInit': ['bool', []],
+  'dDebugDrawDestroy': ['void', []],
+  'dDebugDrawCircle': ['void', ['float', 'float', 'float', 'int', 'int', 'int', 'int']],
+  'dDebugDrawPoly': ['void', ['int', 'int', 'int', 'int', 'int']]
 });
 
 // shallow copies an object
@@ -540,5 +551,20 @@ exports.Util = {
       str += prop + ": " + obj[prop] + "\n";
     }
     return str;
+  }
+}
+
+exports.Debug = {
+  drawCircle: function(circle, color) {
+    Diamond.dDebugDrawCircle(
+      circle.center.x, circle.center.y, circle.radius,
+      color.r, color.g, color.b, color.a
+    );
+  },
+  drawPoly: function(points, color) {
+    let pointlist = Diamond.dPointList2DInit();
+    points.map(point => Diamond.dPointList2DAddPoint(pointlist, point.x, point.y));
+    Diamond.dDebugDrawPoly(pointlist, color.r, color.g, color.b, color.a);
+    Diamond.dPointList2DDelete(pointlist);
   }
 }
