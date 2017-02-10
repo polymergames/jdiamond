@@ -175,7 +175,8 @@ exports.init = function(config) {
   if (!(Diamond.dEngine2DInit() &&
         Diamond.dTransform2Init() &&
         Diamond.dRenderer2DInit() &&
-        Diamond.dParticleSystem2DInit(config.particlePoolSize))) {
+        Diamond.dParticleSystem2DInit(config.particlePoolSize) &&
+        Diamond.dDebugDrawInit())) {
     success = false;
   }
 
@@ -226,6 +227,7 @@ exports.quit = function() {
 exports.cleanUp = function() {
   Diamond.dGame2DDestroy();
   Diamond.dConfigDestroyAll();
+  Diamond.dDebugDrawDestroy();
   Diamond.dParticleSystem2DDestroy();
   Diamond.dRenderer2DDestroy();
   Diamond.dTransform2Destroy();
@@ -555,6 +557,7 @@ exports.Util = {
 }
 
 exports.Debug = {
+  // draw functions only draw on the current frame
   drawCircle: function(circle, color) {
     Diamond.dDebugDrawCircle(
       circle.center.x, circle.center.y, circle.radius,

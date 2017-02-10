@@ -47,6 +47,16 @@ if (Diamond.init(config)) {
         particleConfig, laserShip.transform
     );
 
+    // for testing debug drawing
+    let polypoints = [
+      {x: 200, y: 250},
+      {x: 300, y: 200},
+      {x: 400, y: 250},
+      {x: 350, y: 300},
+      {x: 250, y: 300}
+    ];
+    let debugcolor = {r: 0, g: 255, b: 0, a: 100};
+
     // game update
     const update = function(delta) {
         laserShip.transform.position.add(
@@ -56,6 +66,11 @@ if (Diamond.init(config)) {
             )
         );
         laserShip.transform.rotation += delta * turnspeed;
+
+        // test debug drawing
+        let circle = {center: laserShip.transform.position, radius: 50};
+        Diamond.Debug.drawCircle(circle, debugcolor);
+        Diamond.Debug.drawPoly(polypoints, debugcolor);
     }
 
     Diamond.launch(update);
