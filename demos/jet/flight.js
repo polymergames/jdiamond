@@ -24,55 +24,79 @@ config.windowHeight = 1080;
 config.vsync = true;
 
 if (Diamond.init(config)) {
-    // laser ship
-    const pos = Diamond.Vector2.scalarVec(
-        Diamond.renderer.resolution, {x: 0.5, y: 0.25}
+  // laser ship
+  const pos = Diamond.Vector2.scalarVec(
+    Diamond.renderer.resolution, {x: 0.5, y: 0.25}
+  );
+
+  const shipSprite = Diamond.renderer.loadTexture("assets/laserShip.png");
+
+  var movespeed = 1;
+  var turnspeed = 0.2;
+
+  // using a function because in a regular object,
+  // this.* members are usable during initialization
+  const laserShip = new function() {
+    this.transform = new Diamond.Transform2(pos);
+    this.renderer = new Diamond.RenderComponent2D(this.transform, shipSprite, 1);
+    this.rigidbody = new Diamond.Rigidbody2D(this.transform);
+    this.collider = new Diamond.CircleCollider(this.rigidbody, {
+      center: {x: 0, y: 0}, radius: 100
+    });
+    // this.destroy = function() {
+    //   this.renderer.destroy();
+    //   this.transform.destroy();
+    // }
+  };
+  laserShip.renderer.pivot = {x: 40, y: 95};
+
+  // particle system
+  const particleConfig = JSON.parse(fs.readFileSync("jet/jetstreamparticles.json"));
+
+  const particles = new Diamond.ParticleEmitter2D(
+    particleConfig, laserShip.transform
+  );
+
+  // the poly thing
+  const polypoints = [
+    {x: 0, y: 50},
+    {x: 100, y: 0},
+    {x: 200, y: 50},
+    {x: 150, y: 100},
+    {x: 50, y: 100}
+  ];
+
+  const thing = new function() {
+    this.transform = new Diamond.Transform2({x: 300, y: 300});
+    this.rigidbody = new Diamond.Rigidbody2D(this.transform);
+    this.collider = new Diamond.PolygonCollider(this.rigidbody, polypoints);
+
+    // this.destroy = function() {
+    //   this.collider.destroy();
+    //   this.rigidbody.destroy();
+    //   this.transform.destroy();
+    // }
+  };
+
+  // for debug drawing
+  const debugcolor = {r: 255, g: 0, b: 0, a: 100};
+
+  // game update
+  const update = function(delta) {
+    laserShip.transform.position.add(
+      Diamond.Vector2.rotateVector(
+        {x: delta * movespeed, y: 0},
+        laserShip.transform.rotation * Diamond.Math.DEG2RAD
+      )
     );
+    laserShip.transform.rotation += delta * turnspeed;
+    thing.transform.rotation += delta * turnspeed;
 
-    const shipSprite = Diamond.renderer.loadTexture("assets/laserShip.png");
+    // test debug drawing
+    Diamond.Debug.drawCircleCollider(laserShip.collider, debugcolor);
+    Diamond.Debug.drawPolyCollider(thing.collider, debugcolor);
+  }
 
-    var movespeed = 1;
-    var turnspeed = 0.2;
-
-    const laserShip = new function() {
-        this.transform = new Diamond.Transform2(pos);
-        this.renderer = new Diamond.RenderComponent2D(this.transform, shipSprite, 1);
-    };
-    laserShip.renderer.pivot = {x: 40, y: 95};
-
-    // particle system
-    const particleConfig = JSON.parse(fs.readFileSync("jet/jetstreamparticles.json"));
-
-    const particles = new Diamond.ParticleEmitter2D(
-        particleConfig, laserShip.transform
-    );
-
-    // for testing debug drawing
-    let polypoints = [
-      {x: 200, y: 250},
-      {x: 300, y: 200},
-      {x: 400, y: 250},
-      {x: 350, y: 300},
-      {x: 250, y: 300}
-    ];
-    let debugcolor = {r: 0, g: 255, b: 0, a: 100};
-
-    // game update
-    const update = function(delta) {
-        laserShip.transform.position.add(
-            Diamond.Vector2.rotateVector(
-                {x: delta * movespeed, y: 0},
-                laserShip.transform.rotation * Diamond.Math.DEG2RAD
-            )
-        );
-        laserShip.transform.rotation += delta * turnspeed;
-
-        // test debug drawing
-        let circle = {center: laserShip.transform.position, radius: 50};
-        Diamond.Debug.drawCircle(circle, debugcolor);
-        Diamond.Debug.drawPoly(polypoints, debugcolor);
-    }
-
-    Diamond.launch(update);
-    Diamond.cleanUp();
+  Diamond.launch(update);
+  Diamond.cleanUp();
 }

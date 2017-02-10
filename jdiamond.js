@@ -91,8 +91,10 @@ const Diamond = ffi.Library(libpath, {
   'dPhysics2DDestroyRigidbody': ['void', ['int']],
   'dPhysics2DMakeAABBCollider': ['int', ['int', 'float', 'float', 'float', 'float']],
   'dPhysics2DDestroyAABBCollider': ['void', ['int']],
+  'dPhysics2DSetAABBCollider': ['void', ['int', 'float', 'float', 'float', 'float']],
   'dPhysics2DMakeCircleCollider': ['int', ['int', 'float', 'float', 'float']],
   'dPhysics2DDestroyCircleCollider': ['void', ['int']],
+  'dPhysics2DSetCircleCollider': ['void', ['int', 'float', 'float', 'float']],
   'dPhysics2DMakePolyCollider': ['int', ['int', 'int']],
   'dPhysics2DDestroyPolyCollider': ['void', ['int']],
   // ParticleSystem2D
@@ -136,6 +138,28 @@ const Diamond = ffi.Library(libpath, {
 // shallow copies an object
 function copyObj(from, to) {
   Object.assign(to, from)
+}
+
+// wraps a Diamond point list
+class DPointList {
+  constructor(points) {
+    this.mPoints = points;
+    this.handle = Diamond.dPointList2DInit();
+    points.map(point => Diamond.dPointList2DAddPoint(this.handle, point.x, point.y));
+  }
+  destroy() {
+    Diamond.dPointList2DDelete(this.handle);
+  }
+
+  get points() {
+    return this.mPoints;
+  }
+
+  set points(points) {
+    this.mPoints = points;
+    Diamond.dPointList2DClear(this.handle);
+    points.map(point => Diamond.dPointList2DAddPoint(this.handle, point.x, point.y));
+  }
 }
 
 // jdiamond API starts here
@@ -492,7 +516,7 @@ exports.Rigidbody2D = class Rigidbody2D {
 
 exports.CircleCollider = class CircleCollider {
   constructor(rigidbody, circle) {
-    this.circle = circle;
+    this.mCircle = circle;
     this.handle = Diamond.dPhysics2DMakeCircleCollider(
       rigidbody.handle, circle.center.x, circle.center.y, circle.radius
     );
@@ -503,8 +527,54 @@ exports.CircleCollider = class CircleCollider {
 
   get obj() { return this.circle; }
 
-  // TODO
-  set(other) {}
+  set(other) {
+    if (other.circle)
+      this.circle = other.circle;
+    else
+      this.circle = other;
+  }
+
+  get circle() {
+    return this.mCircle;
+  }
+
+  set circle(circle) {
+    this.mCircle = circle;
+    Diamond.dPhysics2DSetCircleCollider(
+      this.handle, circle.center.x, circle.center.y, circle.radius
+    );
+  }
+}
+
+exports.PolygonCollider = class PolygonCollider {
+  constructor(rigidbody, points) {
+    this.pointlist = new DPointList(points);
+    this.rigidbody = rigidbody;
+    this.handle = Diamond.dPhysics2DMakePolyCollider(rigidbody.handle, this.pointlist.handle);
+  }
+  destroy() {
+    Diamond.dPhysics2DDestroyPolyCollider(this.handle);
+    this.pointlist.destroy();
+  }
+
+  get obj() { return this.points; }
+
+  set(other) {
+    if (other.points)
+      this.points = other.points;
+    else
+      this.points = other;
+  }
+
+  get points() {
+    return this.pointlist.points;
+  }
+
+  set points(points) {
+    Diamond.dPhysics2DDestroyPolyCollider(this.handle);
+    this.pointlist.points = points;
+    this.handle = Diamond.dPhysics2DMakePolyCollider(this.rigidbody.handle, this.pointlist.handle);
+  }
 }
 
 exports.ParticleEmitter2D = class ParticleEmitter2D {
@@ -531,16 +601,16 @@ exports.ParticleEmitter2D = class ParticleEmitter2D {
   }
 
   get obj() {
-    let objcopy = {}
-    copyObj(this.mConfig, objcopy)
-    return objcopy
+    let objcopy = {};
+    copyObj(this.mConfig, objcopy);
+    return objcopy;
   }
 
   set(other) {
     if (other.config)
-      this.config = other.config
+      this.config = other.config;
     else
-      this.config = other
+      this.config = other;
 
     // if (other.transform)
     //   this.transform = other.transform;
@@ -554,7 +624,7 @@ exports.ParticleEmitter2D = class ParticleEmitter2D {
   }
 
   set config(config) {
-    copyObj(config, this.mConfig)
+    copyObj(config, this.mConfig);
 
     for (let key in config) {
       Diamond.dConfigSet(this.configTable, key, config[key].toString());
@@ -610,10 +680,22 @@ exports.Debug = {
       color.r, color.g, color.b, color.a
     );
   },
+
+  drawCircleCollider: function(circleCollider, color) {
+    Diamond.dDebugDrawCircleCollider(
+      circleCollider.handle, color.r, color.g, color.b, color.a
+    );
+  },
+
   drawPoly: function(points, color) {
-    let pointlist = Diamond.dPointList2DInit();
-    points.map(point => Diamond.dPointList2DAddPoint(pointlist, point.x, point.y));
-    Diamond.dDebugDrawPoly(pointlist, color.r, color.g, color.b, color.a);
-    Diamond.dPointList2DDelete(pointlist);
+    let pointlist = new DPointList(points);
+    Diamond.dDebugDrawPoly(pointlist.handle, color.r, color.g, color.b, color.a);
+    pointlist.destroy();
+  },
+
+  drawPolyCollider: function(polyCollider, color) {
+    Diamond.dDebugDrawPolyCollider(
+      polyCollider.handle, color.r, color.g, color.b, color.a
+    )
   }
 }

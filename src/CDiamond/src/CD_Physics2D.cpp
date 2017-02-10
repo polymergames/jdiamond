@@ -39,6 +39,10 @@ bool dPhysics2DInit() {
 
 void dPhysics2DDestroy() {
     physWorld = nullptr;
+    rigidbodies.clear();
+    aabbs.clear();
+    circles.clear();
+    polys.clear();
 }
 
 tCD_Handle dPhysics2DMakeRigidbody(tCD_Handle transform) {
