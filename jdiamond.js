@@ -84,6 +84,17 @@ const Diamond = ffi.Library(libpath, {
   'dRenderComponent2DFlipY': ['void', ['int']],
   'dRenderComponent2DIsFlippedX': ['bool', ['int']],
   'dRenderComponent2DIsFlippedY': ['bool', ['int']],
+  // Physics2D
+  'dPhysics2DInit': ['bool', []],
+  'dPhysics2DDestroy': ['void', []],
+  'dPhysics2DMakeRigidbody': ['int', ['int']],
+  'dPhysics2DDestroyRigidbody': ['void', ['int']],
+  'dPhysics2DMakeAABBCollider': ['int', ['int', 'float', 'float', 'float', 'float']],
+  'dPhysics2DDestroyAABBCollider': ['void', ['int']],
+  'dPhysics2DMakeCircleCollider': ['int', ['int', 'float', 'float', 'float']],
+  'dPhysics2DDestroyCircleCollider': ['void', ['int']],
+  'dPhysics2DMakePolyCollider': ['int', ['int', 'int']],
+  'dPhysics2DDestroyPolyCollider': ['void', ['int']],
   // ParticleSystem2D
   'dParticleSystem2DInit': ['bool', ['int']],
   'dParticleSystem2DDestroy': ['void', []],
@@ -117,7 +128,9 @@ const Diamond = ffi.Library(libpath, {
   'dDebugDrawInit': ['bool', []],
   'dDebugDrawDestroy': ['void', []],
   'dDebugDrawCircle': ['void', ['float', 'float', 'float', 'int', 'int', 'int', 'int']],
-  'dDebugDrawPoly': ['void', ['int', 'int', 'int', 'int', 'int']]
+  'dDebugDrawCircleCollider': ['void', ['int', 'int', 'int', 'int', 'int']],
+  'dDebugDrawPoly': ['void', ['int', 'int', 'int', 'int', 'int']],
+  'dDebugDrawPolyCollider': ['void', ['int', 'int', 'int', 'int', 'int']]
 });
 
 // shallow copies an object
@@ -175,6 +188,7 @@ exports.init = function(config) {
   if (!(Diamond.dEngine2DInit() &&
         Diamond.dTransform2Init() &&
         Diamond.dRenderer2DInit() &&
+        Diamond.dPhysics2DInit() &&
         Diamond.dParticleSystem2DInit(config.particlePoolSize) &&
         Diamond.dDebugDrawInit())) {
     success = false;
@@ -229,6 +243,7 @@ exports.cleanUp = function() {
   Diamond.dConfigDestroyAll();
   Diamond.dDebugDrawDestroy();
   Diamond.dParticleSystem2DDestroy();
+  Diamond.dPhysics2DDestroy();
   Diamond.dRenderer2DDestroy();
   Diamond.dTransform2Destroy();
   Diamond.dEngine2DDestroy();
@@ -364,9 +379,9 @@ exports.RenderComponent2D = class RenderComponent2D {
       isFlippedX: this.isFlippedX,
       isFlippedY: this.isFlippedY
     }
-    let objcopy = {}
-    copyObj(objref, objcopy)
-    return objcopy
+    let objcopy = {};
+    copyObj(objref, objcopy);
+    return objcopy;
   }
 
   set(other) {
@@ -459,6 +474,37 @@ exports.renderer = {
       y: ybuf.deref()
     };
   }
+}
+
+// TODO: add more functionality!
+exports.Rigidbody2D = class Rigidbody2D {
+  constructor(transform) {
+    this.handle = Diamond.dPhysics2DMakeRigidbody(transform.handle);
+  }
+  destroy() {
+    Diamond.dPhysics2DDestroyRigidbody(this.handle);
+  }
+
+  get obj() { return {}; }
+
+  set(other) {}
+}
+
+exports.CircleCollider = class CircleCollider {
+  constructor(rigidbody, circle) {
+    this.circle = circle;
+    this.handle = Diamond.dPhysics2DMakeCircleCollider(
+      rigidbody.handle, circle.center.x, circle.center.y, circle.radius
+    );
+  }
+  destroy() {
+    Diamond.dPhysics2DDestroyCircleCollider(this.handle);
+  }
+
+  get obj() { return this.circle; }
+
+  // TODO
+  set(other) {}
 }
 
 exports.ParticleEmitter2D = class ParticleEmitter2D {

@@ -17,6 +17,7 @@
 #include "CD_DebugDrawer.h"
 
 #include "D_DebugDrawer2D.h"
+#include "CD_Physics2D.h"
 #include "CD_Renderer2D.h"
 #include "CD_Util.h"
 using namespace Diamond;
@@ -34,6 +35,7 @@ bool dDebugDrawInit() {
 
 void dDebugDrawDestroy() {
     delete debug;
+    debug = nullptr;
 }
 
 void dDebugDrawCircle(tD_pos x, tD_pos y, tD_pos radius,
@@ -44,7 +46,17 @@ void dDebugDrawCircle(tD_pos x, tD_pos y, tD_pos radius,
     debug->draw(circle, {r, g, b, a});
 }
 
+void dDebugDrawCircleCollider(tCD_Handle circleCollider,
+                              unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
+    debug->draw(dPhysics2DGetCircleCollider(circleCollider), {r, g, b, a});
+}
+
 void dDebugDrawPoly(tCD_Handle pointList,
                     unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
     debug->draw(dGetPointList(pointList), {r, g, b, a});
+}
+
+void dDebugDrawPolyCollider(tCD_Handle polyCollider,
+                            unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
+    debug->draw(dPhysics2DGetPolyCollider(polyCollider), {r, g, b, a});
 }

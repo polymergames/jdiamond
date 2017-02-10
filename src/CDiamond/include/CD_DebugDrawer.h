@@ -24,6 +24,7 @@ extern "C" {
 #endif
 
 /**
+ * Call this before calling any other debug draw functions.
  * Requires that engine and renderer have been initialized first.
  */
 CDEXPORT bool dDebugDrawInit();
@@ -33,8 +34,14 @@ CDEXPORT void dDebugDrawDestroy();
 CDEXPORT void dDebugDrawCircle(tD_pos x, tD_pos y, tD_pos radius,
                                unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 
+CDEXPORT void dDebugDrawCircleCollider(tCD_Handle circleCollider,
+                                       unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+
 CDEXPORT void dDebugDrawPoly(tCD_Handle pointList,
                              unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+
+CDEXPORT void dDebugDrawPolyCollider(tCD_Handle polyCollider,
+                                     unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 
 #ifdef __cplusplus
 }
