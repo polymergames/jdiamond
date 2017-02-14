@@ -84,6 +84,13 @@ const Diamond = ffi.Library(libpath, {
   'dRenderComponent2DFlipY': ['void', ['int']],
   'dRenderComponent2DIsFlippedX': ['bool', ['int']],
   'dRenderComponent2DIsFlippedY': ['bool', ['int']],
+  // Animation2D
+  'dAnimation2DLoadAnimationSheet': ['int', ['int', 'int', 'int', 'int', 'int']],
+  'dAnimation2DDestroyAnimationSheet': ['void', ['int']],
+  'dAnimation2DMakeAnimatorSheet': ['int', ['int', 'int']],
+  'dAnimation2DDestroyAnimatorSheet': ['void', ['int']],
+  'dAnimation2DSetAnimationSheet': ['void', ['int', 'int']],
+  'dAnimation2DUpdate': ['void', ['int']],
   // Physics2D
   'dPhysics2DInit': ['bool', []],
   'dPhysics2DDestroy': ['void', []],
@@ -384,6 +391,42 @@ exports.Transform2 = class Transform2 {
   }
 }
 
+
+exports.renderer = {
+  loadTexture: function(path) {
+    const handle = Diamond.dRenderer2DLoadTexture(path);
+    if (handle < 0)
+      return null;
+    return {handle: handle}
+  },
+  destroyTexture: function(texture) {
+    Diamond.dRenderer2DDestroyTexture(texture.handle);
+  },
+
+  get resolution() {
+    var xbuf = ref.alloc('int');
+    var ybuf = ref.alloc('int');
+
+    Diamond.dRenderer2DGetResolution(xbuf, ybuf);
+
+    return {
+      x: xbuf.deref(),
+      y: ybuf.deref()
+    };
+  },
+  get screenResolution() {
+    var xbuf = ref.alloc('int');
+    var ybuf = ref.alloc('int');
+
+    Diamond.dRenderer2DGetScreenResolution(xbuf, ybuf);
+
+    return {
+      x: xbuf.deref(),
+      y: ybuf.deref()
+    };
+  }
+}
+
 exports.RenderComponent2D = class RenderComponent2D {
   constructor(transform, texture, layer = 0) {
     this.texture = texture;
@@ -465,40 +508,62 @@ exports.RenderComponent2D = class RenderComponent2D {
   }
 }
 
-exports.renderer = {
-  loadTexture: function(path) {
-    const handle = Diamond.dRenderer2DLoadTexture(path);
-    if (handle < 0)
-      return null;
-    return {handle: handle}
-  },
-  destroyTexture: function(texture) {
-    Diamond.dRenderer2DDestroyTexture(texture.handle);
-  },
+// animation =
+// {
+//   spritesheet: Diamond texture,
+//   frameLength: int,
+//   numFrames: int,
+//   rows: int,
+//   columns: int
+// }
+exports.AnimatorSheet = class AnimatorSheet {
+  constructor(animation, renderComponent) {
+    this.mAnimation = {};
+    copyObj(animation, this.mAnimation);
 
-  get resolution() {
-    var xbuf = ref.alloc('int');
-    var ybuf = ref.alloc('int');
+    this.animationHandle = Diamond.dAnimation2DLoadAnimationSheet(
+      animation.spritesheet.handle,
+      animation.frameLength,
+      animation.numFrames,
+      animation.rows,
+      animation.columns
+    );
+    this.handle = Diamond.dAnimation2DMakeAnimatorSheet(
+      renderComponent.handle, this.animationHandle
+    );
+  }
+  destroy() {
+    Diamond.dAnimation2DDestroyAnimatorSheet(this.handle);
+    Diamond.dAnimation2DDestroyAnimationSheet(this.animationHandle);
+  }
 
-    Diamond.dRenderer2DGetResolution(xbuf, ybuf);
+  get obj() { return this.animation; }
 
-    return {
-      x: xbuf.deref(),
-      y: ybuf.deref()
-    };
-  },
-  get screenResolution() {
-    var xbuf = ref.alloc('int');
-    var ybuf = ref.alloc('int');
+  set(other) {
+    if (other.animation)
+      this.animation = other.animation;
+    else
+      this.animation = other;
+  }
 
-    Diamond.dRenderer2DGetScreenResolution(xbuf, ybuf);
+  get animation() {
+    return this.mAnimation;
+  }
 
-    return {
-      x: xbuf.deref(),
-      y: ybuf.deref()
-    };
+  set animation(animation) {
+    this.mAnimation = animation;
+    Diamond.dAnimation2DDestroyAnimationSheet(this.animationHandle);
+    this.animationHandle = Diamond.dAnimation2DLoadAnimationSheet(
+      animation.spritesheet.handle,
+      animation.frameLength,
+      animation.numFrames,
+      animation.rows,
+      animation.columns
+    );
+    Diamond.dAnimation2DSetAnimationSheet(this.handle, this.animationHandle);
   }
 }
+
 
 // TODO: add more functionality!
 exports.Rigidbody2D = class Rigidbody2D {
