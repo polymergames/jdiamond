@@ -91,6 +91,7 @@ const Diamond = ffi.Library(libpath, {
   'dAnimation2DDestroyAnimatorSheet': ['void', ['int']],
   'dAnimation2DSetAnimationSheet': ['void', ['int', 'int']],
   'dAnimation2DUpdate': ['void', ['int']],
+  'dAnimation2DDestroyAll': ['void', []],
   // Physics2D
   'dPhysics2DInit': ['bool', []],
   'dPhysics2DDestroy': ['void', []],
@@ -245,6 +246,7 @@ exports.launch = function(update, postPhysicsUpdate, quit) {
     // update Diamond's non-core systems (ex. particles)
     // that aren't automatically updated within
     // Diamond Engine's game loop.
+    Diamond.dAnimation2DUpdate(delta);
     Diamond.dParticleSystem2DUpdate(delta);
   });
 
@@ -275,6 +277,7 @@ exports.cleanUp = function() {
   Diamond.dDebugDrawDestroy();
   Diamond.dParticleSystem2DDestroy();
   Diamond.dPhysics2DDestroy();
+  Diamond.dAnimation2DDestroyAll();
   Diamond.dRenderer2DDestroy();
   Diamond.dTransform2Destroy();
   Diamond.dEngine2DDestroy();
@@ -513,8 +516,8 @@ exports.RenderComponent2D = class RenderComponent2D {
 //   spritesheet: Diamond texture,
 //   frameLength: int,
 //   numFrames: int,
-//   rows: int,
-//   columns: int
+//   numRows: int,
+//   numColumns: int
 // }
 exports.AnimatorSheet = class AnimatorSheet {
   constructor(animation, renderComponent) {
@@ -525,8 +528,8 @@ exports.AnimatorSheet = class AnimatorSheet {
       animation.spritesheet.handle,
       animation.frameLength,
       animation.numFrames,
-      animation.rows,
-      animation.columns
+      animation.numRows,
+      animation.numColumns
     );
     this.handle = Diamond.dAnimation2DMakeAnimatorSheet(
       renderComponent.handle, this.animationHandle
@@ -557,8 +560,8 @@ exports.AnimatorSheet = class AnimatorSheet {
       animation.spritesheet.handle,
       animation.frameLength,
       animation.numFrames,
-      animation.rows,
-      animation.columns
+      animation.numRows,
+      animation.numColumns
     );
     Diamond.dAnimation2DSetAnimationSheet(this.handle, this.animationHandle);
   }

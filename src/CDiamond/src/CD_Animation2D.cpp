@@ -16,7 +16,6 @@
 
 #include "CD_Animation2D.h"
 
-#include "duSparseVector.h"
 #include "duSwapVector.h"
 #include "D_AnimatorSheet.h"
 #include "CD_Renderer2D.h"
@@ -25,8 +24,16 @@ using namespace Diamond;
 // TODO: refator engine so that animator is given an animation object
 // instead of an animation pointer!
 // for now, we have memory leaks if user doesn't free animations!
-static SparseVector<AnimationSheet*, tCD_Handle> animationSheets;
+static SwapVector<AnimationSheet*, tCD_Handle> animationSheets;
 static SwapVector<AnimatorSheet, tCD_Handle> animatorSheets;
+
+void dAnimation2DDestroyAll() {
+    for (auto i = animationSheets.begin(); i != animationSheets.end(); ++i) {
+        delete *i;
+    }
+    animationSheets.clear();
+    animatorSheets.clear();
+}
 
 tCD_Handle dAnimation2DLoadAnimationSheet(
     tCD_Handle spritesheet, tD_delta frameLength, int numFrames, int rows, int cols

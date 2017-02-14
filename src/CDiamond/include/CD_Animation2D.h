@@ -23,6 +23,9 @@
 extern "C" {
 #endif
 
+// frees all animation associated memory
+CDEXPORT void dAnimation2DDestroyAll();
+
 CDEXPORT tCD_Handle dAnimation2DLoadAnimationSheet(
     tCD_Handle spritesheet, tD_delta frameLength, int numFrames, int rows, int cols
 );
