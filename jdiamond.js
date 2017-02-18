@@ -234,13 +234,22 @@ exports.init = function(config) {
 /**
  * Begins the game loop in the Diamond backend.
  */
-exports.launch = function(update, postPhysicsUpdate, quit) {
-  var postPhysicsUpdateCB = ref.NULL;
-  var quitCB = ref.NULL;
-
-  const updateCB = ffi.Callback('void', ['int'], function(delta) {
-    if (update) {
-      update(delta);
+ // making variables global to avoid garbage collection
+ var postPhysicsUpdateCB = ref.NULL;
+ var quitCB = ref.NULL;
+ var updateCB = ref.NULL;
+ // args {
+ //     update,
+ //     postPhysicsUpdate,
+ //     quit,
+ //     postQuit,
+ //     // indicates whether to use async Diamond launch
+ //     launchAsync
+ // }
+exports.launch = function(args) {
+  updateCB = ffi.Callback('void', ['int'], function(delta) {
+    if (args && args.update) {
+      args.update(delta);
     }
 
     // update Diamond's non-core systems (ex. particles)
@@ -250,15 +259,25 @@ exports.launch = function(update, postPhysicsUpdate, quit) {
     Diamond.dParticleSystem2DUpdate(delta);
   });
 
-  if (postPhysicsUpdate) {
-    postPhysicsUpdateCB = ffi.Callback('void', ['int'], postPhysicsUpdate);
+  if (args && args.postPhysicsUpdate) {
+    postPhysicsUpdateCB = ffi.Callback('void', ['int'], args.postPhysicsUpdate);
   }
-  if (quit) {
-    quitCB = ffi.Callback('void', [], quit);
+  if (args && args.quit) {
+    quitCB = ffi.Callback('void', [], args.quit);
   }
 
   Diamond.dGame2DInit(ref.NULL, updateCB, postPhysicsUpdateCB, quitCB);
-  Diamond.dEngine2DLaunchGame();
+
+  if (args && args.launchAsync) {
+      Diamond.dEngine2DLaunchGame.async((err, res) => {
+          if (args && args.postQuit) {
+              args.postQuit(err, res)
+          }
+      });
+  }
+  else {
+      Diamond.dEngine2DLaunchGame();
+  }
 }
 
 /**

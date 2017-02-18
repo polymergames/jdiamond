@@ -97,6 +97,6 @@ if (Diamond.init(config)) {
     Diamond.Debug.drawPolyCollider(thing.collider, debugcolor);
   }
 
-  Diamond.launch(update);
+  Diamond.launch({update: update});
   Diamond.cleanUp();
 }
