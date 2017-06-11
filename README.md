@@ -40,7 +40,7 @@ if (Diamond.init()) {
 
 ## Installation
 
-OSX or Windows is required- we plan on supporting Linux in the future.
+OSX or Windows is required, but Windows is not officially supported (in particular, some Windows binaries may be out of date). We might support Linux in the future.
 
 If you don't already have node.js, install it from [here](https://nodejs.org/en/).
 Then in your project folder, run:
@@ -49,7 +49,7 @@ Then in your project folder, run:
 $ npm install jdiamond
 ```
 
-You also need to have SDL2, SDL2 image, and SDL2 mixer installed. If you don't have them already, follow the instructions for your platform:
+You also need to have SDL2, SDL2 image, SDL2 mixer, and SDL2 ttf installed. If you don't have them already, follow the instructions for your platform:
 
 #### Mac
 
