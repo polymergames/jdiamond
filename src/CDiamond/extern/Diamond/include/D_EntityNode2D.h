@@ -30,19 +30,39 @@ namespace Diamond {
         EntityNode2D(const Transform2Ptr &world_transform)
             : Node2D(*world_transform), m_transform(world_transform) {}
 
-        virtual ~EntityNode2D() {}
+        // Entity is responsible for managing the lifetime of a given transform
+        virtual ~EntityNode2D() { m_transform.free(); }
 
+        // Since superclass's (Entity's) copy constructor is deleted,
+        // a default one is not automatically created here
+
+        // Move!
+        EntityNode2D(EntityNode2D &&other)
+            : Entity(std::move(other)),
+              Node2D(std::move(other)),
+              m_transform(other.m_transform) {
+            other.m_transform = nullptr;
+        }
+        // doesn't work because Node2D's assignment operator is deleted
+        // EntityNode2D& operator=(EntityNode2D &&other) {
+        //     if (this != &other) {
+        //         Entity::operator=(std::move(other));
+        //         Node2D::operator=(std::move(other));
+        //         m_transform.free();
+        //         m_transform = other.m_transform;
+        //         other.m_transform = nullptr;
+        //     }
+        // }
 
         const Transform2Ptr &getTransformPtr() {
             return m_transform;
         }
 
-        const ConstTransform2Ptr &getTransformPtr() const {
-            return m_transform;
-        }
+        // const ConstTransform2Ptr &getTransformPtr() const {
+        //     return m_transform;
+        // }
 
     protected:
-        // Entity is responsible for managing the lifetime of a given transform
         Transform2Ptr m_transform;
     };
 }

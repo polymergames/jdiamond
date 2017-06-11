@@ -24,7 +24,7 @@
 
 namespace Diamond {
     struct Animation2D {
-        std::vector<SharedPtr<Texture> > sprites;
+        std::vector<Texture*> sprites;
 
         /**
          The length of time in type of tD_delta of one animation frame
@@ -34,4 +34,3 @@ namespace Diamond {
 }
 
 #endif // D_ANIMATION2D_H
-

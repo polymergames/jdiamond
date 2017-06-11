@@ -24,13 +24,32 @@
 namespace Diamond {
     /**
      A set of components and a 2D transform.
+     Takes ownership of the transform, and frees it upon destruction.
     */
     class Entity2D : public Entity {
     public:
-        Entity2D(const Transform2Ptr &transform) 
+        Entity2D(const Transform2Ptr &transform)
             : m_transform(transform) {}
 
-        virtual ~Entity2D() {}
+        virtual ~Entity2D() { m_transform.free(); }
+
+        // Since superclass's copy constructor is deleted,
+        // a default one is not automatically created here
+
+        // Move!
+        Entity2D(Entity2D &&other)
+            : Entity(std::move(other)), m_transform(other.m_transform) {
+            other.m_transform = nullptr;
+        }
+        Entity2D& operator=(Entity2D &&other) {
+            if (this != &other) {
+                Entity::operator=(std::move(other));
+                m_transform.free();
+                m_transform = other.m_transform;
+                other.m_transform = nullptr;
+            }
+            return *this;
+        }
 
         DTransform2 &transform() { return *m_transform; }
         const DTransform2 &transform() const { return *m_transform; }

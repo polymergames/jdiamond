@@ -21,7 +21,7 @@
 using namespace Diamond;
 
 static Engine2D* engine = nullptr;
-static SparseVector<SharedPtr<DTransform2>, tCD_Handle> transforms;
+static SparseVector<Transform2Ptr, tCD_Handle> transforms;
 
 bool dTransform2Init() {
     engine = dEngine2DGetEngine();
@@ -65,7 +65,7 @@ dTransform2f dTransform2GetTransform(tCD_Handle transform) {
             {trans->scale.x, trans->scale.y}};
 }
 
-SharedPtr<DTransform2> &dTransform2GetTransformPtr(tCD_Handle transform) {
+Transform2Ptr& dTransform2GetTransformPtr(tCD_Handle transform) {
     return transforms[transform];
 }
 

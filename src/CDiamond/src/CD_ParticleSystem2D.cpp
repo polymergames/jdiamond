@@ -61,7 +61,7 @@ tCD_Handle dParticleSystem2DMakeEmitter(tCD_Handle config, tCD_Handle transform)
 
     return particleEmitters.insert(particleManager->makeEmitter(
         particleConfig,
-        dTransform2GetTransformPtr(transform),
+        *(dTransform2GetTransformPtr(transform)),
         [](Particle2D &particle, const ParticleSystem2DConfig &config) {
             // numSpawned += 1; // DEBUG
             particle.transform = engine->makeTransform();

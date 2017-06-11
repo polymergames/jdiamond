@@ -81,10 +81,10 @@ CDEXPORT bool dRenderComponent2DIsFlippedY(tCD_Handle renderComponent);
 
 Diamond::Renderer2D* dRenderer2DGetRenderer();
 
-Diamond::SharedPtr<Diamond::Texture>&
+Diamond::DumbPtr<Diamond::Texture>&
 dRenderer2DGetTexture(tCD_Handle texture);
 
-Diamond::SharedPtr<Diamond::RenderComponent2D>&
+Diamond::DumbPtr<Diamond::RenderComponent2D>&
 dRenderComponent2DGetRenderComponent(tCD_Handle renderComponent);
 
 Diamond::TextureFactory*

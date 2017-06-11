@@ -39,6 +39,6 @@ CDEXPORT void dPointList2DDelete(tCD_Handle list);
 }
 #endif
 
-Diamond::PointList2D &dGetPointList(tCD_Handle list);
+Diamond::PointList2D& dGetPointList(tCD_Handle list);
 
 #endif // D_CD_UTIL_H

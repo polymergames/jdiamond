@@ -64,9 +64,9 @@ CDEXPORT void dPhysics2DDestroyPolyCollider(tCD_Handle poly);
 }
 #endif
 
-Diamond::SharedPtr<Diamond::Rigidbody2D> &dPhysics2DGetRigidbody(tCD_Handle rigidbody);
-Diamond::SharedPtr<Diamond::AABBCollider2D> &dPhysics2DGetAABBCollider(tCD_Handle aabb);
-Diamond::SharedPtr<Diamond::CircleCollider> &dPhysics2DGetCircleCollider(tCD_Handle circle);
-Diamond::SharedPtr<Diamond::PolyCollider> &dPhysics2DGetPolyCollider(tCD_Handle poly);
+Diamond::DumbPtr<Diamond::Rigidbody2D> &dPhysics2DGetRigidbody(tCD_Handle rigidbody);
+Diamond::DumbPtr<Diamond::AABBCollider2D> &dPhysics2DGetAABBCollider(tCD_Handle aabb);
+Diamond::DumbPtr<Diamond::CircleCollider> &dPhysics2DGetCircleCollider(tCD_Handle circle);
+Diamond::DumbPtr<Diamond::PolyCollider> &dPhysics2DGetPolyCollider(tCD_Handle poly);
 
 #endif // D_CD_PHYSICS2D_H

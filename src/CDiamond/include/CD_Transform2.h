@@ -80,7 +80,6 @@ CDEXPORT float dTransform2GetScaleY(tCD_Handle transform);
 }
 #endif
 
-Diamond::SharedPtr<Diamond::DTransform2>&
-dTransform2GetTransformPtr(tCD_Handle transform);
+Diamond::Transform2Ptr& dTransform2GetTransformPtr(tCD_Handle transform);
 
 #endif // D_CD_TRANSFORM2_H

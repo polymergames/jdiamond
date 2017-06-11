@@ -19,92 +19,108 @@
 
 #include <memory>
 
-#include "duSwapVector.h"
 #include "D_SDLRenderer2D.h"
+#include "duSwapVector.h"
 
 namespace Diamond {
-    class SDLRenderComponent2D : public RenderComponent2D {
-    public:
-        SDLRenderComponent2D(SDLRenderer2D &renderer,
-                             SDLrenderobj_id renderObj,
-                             RenderLayer layer)
-            : m_renderer(renderer), m_renderObj(renderObj), m_layer(layer) {}
-        
-        ~SDLRenderComponent2D() {
-            m_renderer.destroyRenderObj(m_layer, m_renderObj);
-        }
+class SDLRenderComponent2D : public RenderComponent2D {
+public:
+  SDLRenderComponent2D(SDLRenderer2D &renderer, SDLrenderobj_id renderObj,
+                       const Texture *texture, RenderLayer layer)
+      : m_renderer(renderer), m_renderObj(renderObj), m_sprite(texture),
+        m_layer(layer) {}
 
+  ~SDLRenderComponent2D() { m_renderer.destroyRenderObj(m_layer, m_renderObj); }
 
-        SharedPtr<const Texture> getSprite() const override {
-            return m_renderer.renderObj(m_layer, m_renderObj).texture();
-        }
+  const Texture *getSprite() const override { return m_sprite; }
 
-        void setSprite(const SharedPtr<const Texture> &sprite) override {
-            m_renderer.renderObj(m_layer, m_renderObj).texture()
-                = std::dynamic_pointer_cast<const SDLTexture>(sprite);
-        }
+  void setSprite(const Texture *sprite) override {
+    auto texture = dynamic_cast<const SDLTexture *>(sprite);
+    if (texture) {
+      m_renderer.renderObj(m_layer, m_renderObj).setTexture(texture->texture);
+      m_sprite = sprite;
+    }
+  }
 
+  RenderLayer getLayer() const override { return m_layer; }
 
-        RenderLayer getLayer() const override { return m_layer; }
-        
-        void setLayer(RenderLayer newLayer) override {
-            m_renderObj = m_renderer.changeLayer(m_layer, m_renderObj, newLayer);
-            m_layer = newLayer;
-        }
+  void setLayer(RenderLayer newLayer) override {
+    m_renderObj = m_renderer.changeLayer(m_layer, m_renderObj, newLayer);
+    m_layer = newLayer;
+  }
 
+  RGB getColor() const override {
+    return m_renderer.renderObj(m_layer, m_renderObj).color();
+  }
 
-        Vector2<tD_pos> getClipPos() const override {
-            SDL_Rect &clip = m_renderer.renderObj(m_layer, m_renderObj).clip();
-            return Vector2<tD_pos>(clip.x, clip.y);
-        }
+  void setColor(const RGB &color) override {
+    m_renderer.renderObj(m_layer, m_renderObj).color() = color;
+  }
 
-        Vector2<int> getClipDim() const override {
-            SDL_Rect &clip = m_renderer.renderObj(m_layer, m_renderObj).clip();
-            return Vector2<int>(clip.w, clip.h);
-        }
+  uint8_t getAlpha() const override {
+    return m_renderer.renderObj(m_layer, m_renderObj).alpha();
+  }
 
-        void setClip(tD_pos x, tD_pos y, int w, int h) override {
-            SDL_Rect &clip = m_renderer.renderObj(m_layer, m_renderObj).clip();
-            clip.x = x;
-            clip.y = y;
-            clip.w = w;
-            clip.h = h;
-        }
+  void setAlpha(uint8_t alpha) override {
+    m_renderer.renderObj(m_layer, m_renderObj).alpha() = alpha;
+  }
 
-        void setClipPos(tD_pos x, tD_pos y) override {
-            SDL_Rect &clip = m_renderer.renderObj(m_layer, m_renderObj).clip();
-            clip.x = x;
-            clip.y = y;
-        }
+  Vector2<tD_pos> getClipPos() const override {
+    SDL_Rect &clip = m_renderer.renderObj(m_layer, m_renderObj).clip();
+    return Vector2<tD_pos>(clip.x, clip.y);
+  }
 
-        void setClipDim(int w, int h) override {
-            SDL_Rect &clip = m_renderer.renderObj(m_layer, m_renderObj).clip();
-            clip.w = w;
-            clip.h = h;
-        }
+  Vector2<int> getClipDim() const override {
+    SDL_Rect &clip = m_renderer.renderObj(m_layer, m_renderObj).clip();
+    return Vector2<int>(clip.w, clip.h);
+  }
 
-        Vector2<tD_pos> getPivot() const override {
-            SDL_Point &pivot = m_renderer.renderObj(m_layer, m_renderObj).pivot();
-            return Vector2<tD_pos>(pivot.x, pivot.y);
-        }
+  void setClip(tD_pos x, tD_pos y, int w, int h) override {
+    SDL_Rect &clip = m_renderer.renderObj(m_layer, m_renderObj).clip();
+    clip.x = x;
+    clip.y = y;
+    clip.w = w;
+    clip.h = h;
+  }
 
-        void setPivot(const Vector2<tD_pos> &newpivot) override {
-            m_renderer.renderObj(m_layer, m_renderObj).pivot()
-                = { (int)newpivot.x, (int)newpivot.y };
-        }
+  void setClipPos(tD_pos x, tD_pos y) override {
+    SDL_Rect &clip = m_renderer.renderObj(m_layer, m_renderObj).clip();
+    clip.x = x;
+    clip.y = y;
+  }
 
+  void setClipDim(int w, int h) override {
+    SDL_Rect &clip = m_renderer.renderObj(m_layer, m_renderObj).clip();
+    clip.w = w;
+    clip.h = h;
+  }
 
-        void flipX() override { m_renderer.renderObj(m_layer, m_renderObj).flipX(); }
-        void flipY() override { m_renderer.renderObj(m_layer, m_renderObj).flipY(); }
+  Vector2<tD_pos> getPivot() const override {
+    SDL_Point &pivot = m_renderer.renderObj(m_layer, m_renderObj).pivot();
+    return Vector2<tD_pos>(pivot.x, pivot.y);
+  }
 
-        bool isFlippedX() const override { return m_renderer.renderObj(m_layer, m_renderObj).isFlippedX(); }
-        bool isFlippedY() const override { return m_renderer.renderObj(m_layer, m_renderObj).isFlippedY(); }
+  void setPivot(const Vector2<tD_pos> &newpivot) override {
+    m_renderer.renderObj(m_layer, m_renderObj).pivot() = {(int)newpivot.x,
+                                                          (int)newpivot.y};
+  }
 
-    private:
-        SDLRenderer2D &m_renderer;
-        SDLrenderobj_id m_renderObj;
-        RenderLayer m_layer;
-    };
-}
+  void flipX() override { m_renderer.renderObj(m_layer, m_renderObj).flipX(); }
+  void flipY() override { m_renderer.renderObj(m_layer, m_renderObj).flipY(); }
+
+  bool isFlippedX() const override {
+    return m_renderer.renderObj(m_layer, m_renderObj).isFlippedX();
+  }
+  bool isFlippedY() const override {
+    return m_renderer.renderObj(m_layer, m_renderObj).isFlippedY();
+  }
+
+private:
+  SDLRenderer2D &m_renderer;
+  SDLrenderobj_id m_renderObj;
+  const Texture *m_sprite;
+  RenderLayer m_layer;
+};
+} // namespace Diamond
 
 #endif // D_SDL_RENDER_COMPONENT_2D_H

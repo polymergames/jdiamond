@@ -40,61 +40,69 @@ namespace Diamond {
         Engine2D(const Config &config, bool &success);
         ~Engine2D();
 
-        virtual void        launch(Game2D &game);
+        virtual void   launch(Game2D &game);
 
-        Config              &getConfig() { return config; }
-        const Config        &getConfig() const { return config; }
+        Config         &getConfig() { return config; }
+        const Config   &getConfig() const { return config; }
 
-        Renderer2D          *getRenderer() const { return renderer; }
+        Renderer2D     *getRenderer() const { return renderer; }
 
-        DiskJockey2D        *getDJ() const { return dj; }
+        DiskJockey2D   *getDJ() const { return dj; }
 
-        Timer               *getTimer() const { return timer; }
+        Timer          *getTimer() const { return timer; }
 
-        EventHandler        *getEventHandler() const { return event_handler; }
+        EventHandler   *getEventHandler() const { return event_handler; }
 
-        PhysicsWorld2D      *getPhysWorld() const { return phys_world; }
+        PhysicsWorld2D *getPhysWorld() const { return phys_world; }
 
-        virtual bool        isRunning() const { return is_running; }
-
-        virtual void        quit() { is_running = false; }
+        bool isRunning() const { return is_running; }
+        bool isPaused() const { return is_paused; }
+        
+        void pause() { is_paused = true; }
+        void unPause() { is_paused = false; }
+        
+        void quit() { is_running = false; }
 
         /**
-         * The transform pointers generated here are automatically freed when there are no longer
-         * any references to them. Therefore, it is important to keep at least one copy
-         * of the smart pointer somewhere for the duration of the transform's use 
-         * as other subsystems (ex. rendering, physics) may not make their own copy of the smart pointer
-         * (ie. they might use a reference or raw pointer instead).
-         * A wrapper gameobject class (like an Entity2D) that manages the lifetime of 
-         * a transform and associated components takes care of this.
+         * The returned pointer must be freed manually.
          */
         template <typename... Args>
-        SharedPtr<DTransform2> makeTransform(Args&&... args) {
+        DumbPtr<DTransform2> makeTransform(Args&&... args) {
             return transformPool.make(std::forward<Args>(args)...);
         }
+        
+        
+        // This is a weird function that tries to fix some
+        // platform-specific bugs/idiosyncracies in the renderer.
+        // It was created because on Android, SDL's reported screen resolution
+        // changes at some point after initialization,
+        // after which this function is called
+        // to adjust the SDL event handler's stored resolution.
+        void refreshRenderer();
 
     protected:
-        bool                is_running;
+        bool           is_running;
+        bool           is_paused;
 
-        Config              config;
-        Renderer2D          *renderer;
-        DiskJockey2D        *dj;
-        Timer               *timer;
-        EventHandler        *event_handler;
-        PhysicsWorld2D      *phys_world;
-        
-        std::ofstream       logstream;
+        Config         config;
+        Renderer2D     *renderer;
+        DiskJockey2D   *dj;
+        Timer          *timer;
+        EventHandler   *event_handler;
+        PhysicsWorld2D *phys_world;
 
-        PoolManager<DTransform2, SharedPtr<DTransform2> > transformPool;
+        std::ofstream  logstream;
 
-        virtual bool initSDL();
-        virtual bool initQuantum();
+        DumbPoolManager<DTransform2> transformPool;
+
+        bool initSDL();
+        bool initQuantum();
 
         virtual bool initWindows();
         virtual bool initMac();
         virtual bool initAndroid();
         virtual bool initIOS();
-        
+
         void shutDown();
     };
 }

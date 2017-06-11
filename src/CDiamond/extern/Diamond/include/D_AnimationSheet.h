@@ -22,7 +22,7 @@
 
 namespace Diamond {
     struct AnimationSheet {
-        SharedPtr<Texture> sprite_sheet;
+        Texture *sprite_sheet = nullptr;
 
         /**
          The length of time in type of tD_delta of one animation frame
@@ -35,4 +35,3 @@ namespace Diamond {
 }
 
 #endif // D_ANIMATION_SHEET_H
-

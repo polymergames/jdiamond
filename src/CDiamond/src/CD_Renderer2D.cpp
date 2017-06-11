@@ -23,8 +23,8 @@ using namespace Diamond;
 
 static Renderer2D* renderer = nullptr;
 static TextureFactory* textureFactory = nullptr;
-static SparseVector<SharedPtr<RenderComponent2D>, tCD_Handle> renderComponents;
-static SparseVector<SharedPtr<Texture>, tCD_Handle> textures;
+static SparseVector<DumbPtr<RenderComponent2D>, tCD_Handle> renderComponents;
+static SparseVector<DumbPtr<Texture>, tCD_Handle> textures;
 
 bool dRenderer2DInit() {
     auto engine = dEngine2DGetEngine();
@@ -63,7 +63,7 @@ void dRenderer2DDestroyTexture(tCD_Handle texture) {
     textures.erase(texture);
 }
 
-SharedPtr<Texture>& dRenderer2DGetTexture(tCD_Handle texture) {
+DumbPtr<Texture>& dRenderer2DGetTexture(tCD_Handle texture) {
     return textures[texture];
 }
 
@@ -84,7 +84,7 @@ void dRenderer2DDestroyRenderComponent(tCD_Handle renderComponent) {
     renderComponents.erase(renderComponent);
 }
 
-SharedPtr<RenderComponent2D>&
+DumbPtr<RenderComponent2D>&
 dRenderComponent2DGetRenderComponent(tCD_Handle renderComponent) {
     return renderComponents[renderComponent];
 }

@@ -23,10 +23,10 @@
 using namespace Diamond;
 
 static PhysicsWorld2D *physWorld = nullptr;
-static SparseVector<SharedPtr<Rigidbody2D>, tCD_Handle> rigidbodies;
-static SparseVector<SharedPtr<AABBCollider2D>, tCD_Handle> aabbs;
-static SparseVector<SharedPtr<CircleCollider>, tCD_Handle> circles;
-static SparseVector<SharedPtr<PolyCollider>, tCD_Handle> polys;
+static SparseVector<DumbPtr<Rigidbody2D>, tCD_Handle> rigidbodies;
+static SparseVector<DumbPtr<AABBCollider2D>, tCD_Handle> aabbs;
+static SparseVector<DumbPtr<CircleCollider>, tCD_Handle> circles;
+static SparseVector<DumbPtr<PolyCollider>, tCD_Handle> polys;
 
 bool dPhysics2DInit() {
     auto engine = dEngine2DGetEngine();
@@ -115,18 +115,18 @@ void dPhysics2DDestroyPolyCollider(tCD_Handle poly) {
     polys.erase(poly);
 }
 
-SharedPtr<Rigidbody2D> &dPhysics2DGetRigidbody(tCD_Handle rigidbody) {
+DumbPtr<Rigidbody2D> &dPhysics2DGetRigidbody(tCD_Handle rigidbody) {
     return rigidbodies[rigidbody];
 }
 
-SharedPtr<AABBCollider2D> &dPhysics2DGetAABBCollider(tCD_Handle aabb) {
+DumbPtr<AABBCollider2D> &dPhysics2DGetAABBCollider(tCD_Handle aabb) {
     return aabbs[aabb];
 }
 
-SharedPtr<CircleCollider> &dPhysics2DGetCircleCollider(tCD_Handle circle) {
+DumbPtr<CircleCollider> &dPhysics2DGetCircleCollider(tCD_Handle circle) {
     return circles[circle];
 }
 
-SharedPtr<PolyCollider> &dPhysics2DGetPolyCollider(tCD_Handle poly) {
+DumbPtr<PolyCollider> &dPhysics2DGetPolyCollider(tCD_Handle poly) {
     return polys[poly];
 }

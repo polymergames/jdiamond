@@ -39,7 +39,7 @@ tCD_Handle dAnimation2DLoadAnimationSheet(
     tCD_Handle spritesheet, tD_delta frameLength, int numFrames, int rows, int cols
 ) {
     auto sheet = new AnimationSheet();
-    sheet->sprite_sheet = dRenderer2DGetTexture(spritesheet);
+    sheet->sprite_sheet = dRenderer2DGetTexture(spritesheet).get();
     sheet->frame_length = frameLength;
     sheet->num_frames = numFrames;
     sheet->rows = rows;
@@ -55,7 +55,7 @@ void dAnimation2DDestroyAnimationSheet(tCD_Handle animationSheet) {
 tCD_Handle dAnimation2DMakeAnimatorSheet(
     tCD_Handle renderComponent, tCD_Handle animationSheet
 ) {
-    return animatorSheets.emplace(dRenderComponent2DGetRenderComponent(renderComponent),
+    return animatorSheets.emplace(dRenderComponent2DGetRenderComponent(renderComponent).get(),
                                   animationSheets[animationSheet]);
 }
 

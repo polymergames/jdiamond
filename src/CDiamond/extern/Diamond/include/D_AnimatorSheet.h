@@ -25,30 +25,35 @@
 namespace Diamond {
     class AnimatorSheet : public Component {
     public:
-        AnimatorSheet(const SharedPtr<RenderComponent2D> &rcomp, 
-                      const AnimationSheet *anim);
+        AnimatorSheet(RenderComponent2D *rcomp,
+                      const AnimationSheet *anim,
+                      bool loop = true);
 
 
-        const AnimationSheet                *getAnimation() const { return m_anim; }
-
-        void                                setAnimation(const AnimationSheet *anim);
-
-
-        const SharedPtr<RenderComponent2D>  &getRenderComponent() const { return m_render_comp; }
-
-        void                                setRenderComponent(const SharedPtr<RenderComponent2D> &rcomp);
+        const AnimationSheet *getAnimation() const { return m_anim; }
+        void setAnimation(const AnimationSheet *anim);
         
+        void setLoop(bool loop) { m_loop = loop; }
+        bool isLoop() const { return m_loop; }
+        
+        // animation is never done if it is looped,
+        // otherwise it is done when it's on the last frame
+        bool isDone() const { return !m_loop && (m_cur_frame + 1 >= m_anim->num_frames); }
 
-        tD_index                            getCurFrame() const { return m_cur_frame; }
+        RenderComponent2D *getRenderComponent() { return m_render_comp; }
+        const RenderComponent2D *getRenderComponent() const { return m_render_comp; }
+        void setRenderComponent(RenderComponent2D *rcomp);
 
-        tD_delta                            getCurFrameElapsed() const { return m_elapsed; }
 
+        tD_index getCurFrame() const { return m_cur_frame; }
+        tD_delta getCurFrameElapsed() const { return m_elapsed; }
 
-        void                                update(tD_delta delta) override;
+        void update(tD_delta delta) override;
 
     private:
-        SharedPtr<RenderComponent2D>        m_render_comp;
+        RenderComponent2D                   *m_render_comp;
         const AnimationSheet                *m_anim;
+        bool                                m_loop;
 
         int16_t                             m_frame_width, m_frame_height;
         tD_index                            m_cur_frame;

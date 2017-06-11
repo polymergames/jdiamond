@@ -22,7 +22,7 @@
 #include "CD_Util.h"
 using namespace Diamond;
 
-static DebugDrawer *debug = nullptr;
+static DebugDrawer* debug = nullptr;
 
 bool dDebugDrawInit() {
     auto renderer = dRenderer2DGetRenderer();
