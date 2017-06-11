@@ -10,6 +10,7 @@ if [ "$#" -gt 0 ]; then
     DEST="$1"
 fi
 
+# OSX
 if [[ "$PLATFORM" == "Darwin" || "$TRAVIS_OS_NAME" == "osx" ]]; then
     echo "Installing SDL2"
     wget --show-progress https://www.libsdl.org/release/SDL2-2.0.5.dmg
@@ -31,5 +32,13 @@ if [[ "$PLATFORM" == "Darwin" || "$TRAVIS_OS_NAME" == "osx" ]]; then
     cp -r -n /Volumes/SDL2_mixer/*.framework "$DEST"
     hdiutil detach /Volumes/SDL2_mixer/
     rm SDL2_mixer-2.0.1.dmg
+
+    echo "Installing SDL ttf"
+    wget --show-progress https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-2.0.14.dmg
+    hdiutil attach SDL2_ttf-2.0.14.dmg
+    cp -r -n /Volumes/SDL2_ttf/*.framework "$DEST"
+    hdiutil detach /Volumes/SDL2_ttf/
+    rm SDL2_ttf-2.0.14.dmg
+
 fi
 #TODO: install dependencies for windows and linux!
