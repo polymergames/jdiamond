@@ -25,7 +25,7 @@ config.vsync = true;
 config.benchmark = true;
 
 if (Diamond.init(config)) {
-    const particleConfig = JSON.parse(fs.readFileSync("particles/particleseverywhere.json"));
+    const particleConfig = JSON.parse(fs.readFileSync("particles/smallfountain.json"));
 
     const particles = new Diamond.ParticleEmitter2D(
         particleConfig, new Diamond.Transform2({x: 960, y: 540})
