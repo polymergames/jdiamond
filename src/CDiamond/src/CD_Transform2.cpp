@@ -16,12 +16,12 @@
 
 #include "CD_Transform2.h"
 
-#include "duSparseVector.h"
+#include "duSwapVector.h"
 #include "CD_Engine2D.h"
 using namespace Diamond;
 
 static Engine2D* engine = nullptr;
-static SparseVector<Transform2Ptr, tCD_Handle> transforms;
+static SwapVector<Transform2Ptr, tCD_Handle> transforms;
 
 bool dTransform2Init() {
     engine = dEngine2DGetEngine();
@@ -29,6 +29,9 @@ bool dTransform2Init() {
 }
 
 void dTransform2Destroy() {
+    for (auto& ptr : transforms) {
+      ptr.free();
+    }
     transforms.clear();
     // note: we don't own the engine, so we don't destroy it.
     // we were just borrowing a pointer to it.
@@ -52,9 +55,7 @@ tCD_Handle dTransform2MakeTransform(float positionX, float positionY,
 }
 
 void dTransform2DestroyTransform(tCD_Handle transform) {
-    // SparseVector.erase doesn't immediately destroy the element,
-    // so we set it to nullptr to make sure it's destroyed.
-    transforms[transform] = nullptr;
+    transforms[transform].free();
     transforms.erase(transform);
 }
 

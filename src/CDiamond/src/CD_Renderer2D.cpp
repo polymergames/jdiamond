@@ -16,15 +16,15 @@
 
 #include "CD_Renderer2D.h"
 
-#include "duSparseVector.h"
+#include "duSwapVector.h"
 #include "CD_Engine2D.h"
 #include "CD_Transform2.h"
 using namespace Diamond;
 
 static Renderer2D* renderer = nullptr;
 static TextureFactory* textureFactory = nullptr;
-static SparseVector<DumbPtr<RenderComponent2D>, tCD_Handle> renderComponents;
-static SparseVector<DumbPtr<Texture>, tCD_Handle> textures;
+static SwapVector<DumbPtr<RenderComponent2D>, tCD_Handle> renderComponents;
+static SwapVector<DumbPtr<Texture>, tCD_Handle> textures;
 
 bool dRenderer2DInit() {
     auto engine = dEngine2DGetEngine();
@@ -36,6 +36,12 @@ bool dRenderer2DInit() {
 }
 
 void dRenderer2DDestroy() {
+    for (auto& ptr : renderComponents) {
+      ptr.free();
+    }
+    for (auto& ptr : textures) {
+      ptr.free();
+    }
     renderComponents.clear();
     textures.clear();
     renderer = nullptr;
@@ -60,6 +66,7 @@ tCD_Handle dRenderer2DLoadTexture(char* path) {
 }
 
 void dRenderer2DDestroyTexture(tCD_Handle texture) {
+    textures[texture].free();
     textures.erase(texture);
 }
 
@@ -78,9 +85,7 @@ tCD_Handle dRenderer2DMakeRenderComponent(tCD_Handle transform,
 }
 
 void dRenderer2DDestroyRenderComponent(tCD_Handle renderComponent) {
-    // SparseVector.erase doesn't immediately destroy the element,
-    // so we set it to nullptr to make sure it's destroyed.
-    renderComponents[renderComponent] = nullptr;
+    renderComponents[renderComponent].free();
     renderComponents.erase(renderComponent);
 }
 

@@ -16,17 +16,17 @@
 
 #include "CD_Physics2D.h"
 
-#include "duSparseVector.h"
+#include "duSwapVector.h"
 #include "CD_Engine2D.h"
 #include "CD_Transform2.h"
 #include "CD_Util.h" // for pointlist
 using namespace Diamond;
 
 static PhysicsWorld2D *physWorld = nullptr;
-static SparseVector<DumbPtr<Rigidbody2D>, tCD_Handle> rigidbodies;
-static SparseVector<DumbPtr<AABBCollider2D>, tCD_Handle> aabbs;
-static SparseVector<DumbPtr<CircleCollider>, tCD_Handle> circles;
-static SparseVector<DumbPtr<PolyCollider>, tCD_Handle> polys;
+static SwapVector<DumbPtr<Rigidbody2D>, tCD_Handle> rigidbodies;
+static SwapVector<DumbPtr<AABBCollider2D>, tCD_Handle> aabbs;
+static SwapVector<DumbPtr<CircleCollider>, tCD_Handle> circles;
+static SwapVector<DumbPtr<PolyCollider>, tCD_Handle> polys;
 
 bool dPhysics2DInit() {
     auto engine = dEngine2DGetEngine();
@@ -39,6 +39,18 @@ bool dPhysics2DInit() {
 
 void dPhysics2DDestroy() {
     physWorld = nullptr;
+    for (auto& ptr : rigidbodies) {
+      ptr.free();
+    }
+    for (auto& ptr : aabbs) {
+      ptr.free();
+    }
+    for (auto& ptr : circles) {
+      ptr.free();
+    }
+    for (auto& ptr : polys) {
+      ptr.free();
+    }
     rigidbodies.clear();
     aabbs.clear();
     circles.clear();
@@ -50,6 +62,7 @@ tCD_Handle dPhysics2DMakeRigidbody(tCD_Handle transform) {
 }
 
 void dPhysics2DDestroyRigidbody(tCD_Handle rigidbody) {
+    rigidbodies[rigidbody].free();
     rigidbodies.erase(rigidbody);
 }
 
@@ -66,6 +79,7 @@ tCD_Handle dPhysics2DMakeAABBCollider(
 }
 
 void dPhysics2DDestroyAABBCollider(tCD_Handle aabb) {
+    aabbs[aabb].free();
     aabbs.erase(aabb);
 }
 
@@ -89,6 +103,7 @@ tCD_Handle dPhysics2DMakeCircleCollider(
 }
 
 void dPhysics2DDestroyCircleCollider(tCD_Handle circle) {
+    circles[circle].free();
     circles.erase(circle);
 }
 
@@ -112,6 +127,7 @@ tCD_Handle dPhysics2DMakePolyCollider(
 }
 
 void dPhysics2DDestroyPolyCollider(tCD_Handle poly) {
+    polys[poly].free();
     polys.erase(poly);
 }
 
